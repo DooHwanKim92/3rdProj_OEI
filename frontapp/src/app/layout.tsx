@@ -18,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+
         <nav>
           <Link href="/">홈</Link>
           <Link href="/article">게시글</Link>
