@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./input.css";
 import Link from "next/link";
+import HeaderSection from "./header/page";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,15 +17,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-
-        <nav>
-          <Link href="/">홈</Link>
-          <Link href="/article">게시글</Link>
-          <Link href="/signup">회원가입</Link>
-        </nav>
-        {children}</body>
+    <html lang="ko">
+      <HeaderSection/>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
