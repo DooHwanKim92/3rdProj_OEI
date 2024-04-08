@@ -8,7 +8,7 @@ import proj3.oei.domain.siteuser.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/articles")
+@RequestMapping("/api/v1/user")
 public class ApiV1UserController {
 
     private final UserService userService;

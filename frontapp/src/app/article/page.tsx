@@ -1,38 +1,53 @@
 'use client'
-
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
 const products = [
     {
       id: 1,
-      name: 'Earthen Bottle',
+      name: '와인병 팝니다.',
       href: '#',
-      price: '$48',
+      price: '5,000원',
       imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
       imageAlt: 'Tall slender porcelain bottle with natural clay textured body and cork stopper.',
     },
     {
       id: 2,
-      name: 'Nomad Tumbler',
+      name: '텀블러 팔아용',
       href: '#',
-      price: '$35',
+      price: '3,000원',
       imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
       imageAlt: 'Olive drab green insulated bottle with flared screw lid and flat top.',
     },
     {
       id: 3,
-      name: 'Focus Paper Refill',
+      name: '메모장',
       href: '#',
-      price: '$89',
+      price: '500원',
       imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-03.jpg',
       imageAlt: 'Person using a pen to cross a task off a productivity paper card.',
     },
     {
       id: 4,
-      name: 'Machined Mechanical Pencil',
+      name: '개쩌는 연필 팔아유',
       href: '#',
-      price: '$35',
+      price: '1,500원',
+      imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
+      imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
+    },
+    {
+      id: 5,
+      name: '개쩌는 연필 팔아유',
+      href: '#',
+      price: '1,500원',
+      imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
+      imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
+    },
+    {
+      id: 6,
+      name: '개쩌는 연필 팔아유',
+      href: '#',
+      price: '1,500원',
       imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-04.jpg',
       imageAlt: 'Hand holding black machined steel mechanical pencil with brass tip and top.',
     },
