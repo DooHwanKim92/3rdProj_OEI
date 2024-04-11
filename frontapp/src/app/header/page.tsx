@@ -36,7 +36,7 @@ export default function HeaderSection() {
 
   const router = useRouter();
 
-  let isLoggedIn = true;
+  let isLoggedIn = false;
 
   const handleLogout = async () => {
     const response = await fetch("http://localhost:8090/api/v1/members/logout", {
@@ -145,6 +145,7 @@ export default function HeaderSection() {
           <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
             로그아웃 <span aria-hidden="true">&rarr;</span>
           </button>
+          
           
           
           
