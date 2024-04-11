@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./input.css";
-import Link from "next/link";
 import HeaderSection from "./header/page";
+import "./input.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <div><HeaderSection/></div>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <HeaderSection/>
+        {children}</body>
     </html>
   );
 }

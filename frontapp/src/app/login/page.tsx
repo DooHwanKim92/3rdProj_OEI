@@ -1,4 +1,18 @@
-export default function LogIn() {
+/*
+  This example requires some changes to your config:
+  
+  ```
+  // tailwind.config.js
+  module.exports = {
+    // ...
+    plugins: [
+      // ...
+      require('@tailwindcss/forms'),
+    ],
+  }
+  ```
+*/
+export default function Example() {
   return (
     <>
       {/*
@@ -11,16 +25,14 @@ export default function LogIn() {
       */}
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <a href="/">
-            <img
-              className="mx-auto h-10 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              alt="Your Company"
-            />
-          </a>
-          {/* <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <img
+            className="mx-auto h-10 w-auto"
+            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            alt="Your Company"
+          />
+          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             로그인
-          </h2> */}
+          </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -48,7 +60,7 @@ export default function LogIn() {
                 </label>
                 <div className="text-sm">
                   <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    아이디/비밀번호를 잊으셨나요?
+                    비밀번호를 잊으셨나요?
                   </a>
                 </div>
               </div>
@@ -75,9 +87,9 @@ export default function LogIn() {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            처음 방문하셨나요? 
+            처음 방문인가요?{' '}
             <a href="/signup" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-              회원가입
+              회원가입 하러가기
             </a>
           </p>
         </div>

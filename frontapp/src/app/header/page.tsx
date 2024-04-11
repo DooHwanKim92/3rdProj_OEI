@@ -1,6 +1,5 @@
 'use client'
-
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
   ArrowPathIcon,
@@ -33,7 +32,7 @@ export default function HeaderSection() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <div className="bg-white">
+    <header className="bg-white">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
           <a href="/" className="-m-1.5 p-1.5">
@@ -107,12 +106,17 @@ export default function HeaderSection() {
             중고거래
           </a>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            아르바이트
+            메뉴1
           </a>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            (검색창으로 변경예정)
+            메뉴2
           </a>
         </Popover.Group>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
+            로그인 <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
       </nav>
       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
         <div className="fixed inset-0 z-10" />
@@ -142,7 +146,7 @@ export default function HeaderSection() {
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                        Product
+                        동네생활
                         <ChevronDownIcon
                           className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
                           aria-hidden="true"
@@ -164,36 +168,36 @@ export default function HeaderSection() {
                   )}
                 </Disclosure>
                 <a
-                  href="#"
+                  href="/article"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Features
+                  중고거래
                 </a>
                 <a
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Marketplace
+                  메뉴1
                 </a>
                 <a
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Company
+                  메뉴2
                 </a>
               </div>
               <div className="py-6">
                 <a
-                  href="#"
+                  href="/login"
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Log in
+                  로그인
                 </a>
               </div>
             </div>
           </div>
         </Dialog.Panel>
       </Dialog>
-    </div>
+    </header>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import HeaderSection from "../header/page"
 
 const products = [
     {
@@ -70,6 +71,7 @@ export default function Article () {
 
     return (
         <>  
+        
             <ArticleForm fetchArticle={fetchArticle} />
             <ul>
                 게시물 리스트

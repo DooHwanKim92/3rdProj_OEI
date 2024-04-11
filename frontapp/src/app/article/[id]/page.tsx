@@ -1,4 +1,5 @@
 'use client'
+import HeaderSection from "@/app/header/page";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -54,6 +55,7 @@ export default function ArticleDetail() {
     
     return (
         <>
+        
             Article Detail{params.id} Page
             <div>
                 {article.id} / {article.title} / {article.content}
