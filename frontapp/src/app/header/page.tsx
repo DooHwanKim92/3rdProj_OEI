@@ -1,5 +1,6 @@
 'use client'
-import { Fragment, useState } from 'react'
+
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
   ArrowPathIcon,
@@ -11,6 +12,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+import { useParams, useRouter } from "next/navigation";
 
 const products = [
   { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
@@ -29,7 +31,31 @@ function classNames(...classes) {
 }
 
 export default function HeaderSection() {
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const router = useRouter();
+
+  let isLoggedIn = true;
+
+  const handleLogout = async () => {
+    const response = await fetch("http://localhost:8090/api/v1/members/logout", {
+        method: 'POST',
+        credentials: 'include', // 핵심 변경점
+        headers: {
+            'Content-Type': 'application/json' 
+        }
+    })
+
+    if (response.ok) {
+        alert("ok")
+        isLoggedIn = false;
+        router.push("/")
+    } else {
+        alert("fail")
+    }
+  }
+ 
 
   return (
     <header className="bg-white">
@@ -108,14 +134,20 @@ export default function HeaderSection() {
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
             메뉴1
           </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            메뉴2
+          <a href="/about" className="text-sm font-semibold leading-6 text-gray-900">
+            나의정보
           </a>
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
             로그인 <span aria-hidden="true">&rarr;</span>
           </a>
+          <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
+            로그아웃 <span aria-hidden="true">&rarr;</span>
+          </button>
+          
+          
+          
         </div>
       </nav>
       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>

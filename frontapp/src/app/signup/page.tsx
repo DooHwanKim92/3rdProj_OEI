@@ -1,20 +1,6 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
-export default function Example() {
+export default function SignUp() {
   return (
     <div className="bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
     <form>

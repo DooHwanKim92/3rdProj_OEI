@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import HeaderSection from "./header/page";
 import "./input.css";
+import Banner from "./banner/page";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={inter.className}>
         <HeaderSection/>
+        <Banner/>
         {children}</body>
     </html>
   );

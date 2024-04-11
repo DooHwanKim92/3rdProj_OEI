@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import proj3.oei.domain.article.entity.Article;
 import proj3.oei.domain.article.repository.ArticleRepository;
+import proj3.oei.domain.member.entity.Member;
 import proj3.oei.global.resultData.RsData;
 
 import java.util.List;
@@ -26,8 +27,9 @@ public class ArticleService {
 
     @Transactional
     // 예외 발생 시 rollback 해준다
-    public RsData<Article> create(String title, String content) {
+    public RsData<Article> create(Member member, String title, String content) {
         Article article = Article.builder()
+                .author(member)
                 .title(title)
                 .content(content)
                 .build();

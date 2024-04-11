@@ -1,5 +1,5 @@
 'use client'
-import HeaderSection from "@/app/header/page";
+
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 

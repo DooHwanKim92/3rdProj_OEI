@@ -35,6 +35,17 @@ public class Rq {
         resp.addHeader("Set-Cookie", cookie.toString());
     }
 
+    public void removeCrossDomainCookie(String name) {
+        ResponseCookie cookie = ResponseCookie.from(name, null)
+                .path("/")
+                .maxAge(0)
+                .sameSite("None")
+                .secure(true)
+                .httpOnly(true)
+                .build();
+        resp.addHeader("Set-Cookie", cookie.toString());
+    }
+
     public String getCookieValue(String name, String defaultValue) {
         Cookie cookie = getCookie(name);
 
@@ -79,9 +90,10 @@ public class Rq {
         return !isLogin();
     }
 
-    private boolean isLogin() {
+    public boolean isLogin() {
         return getUser() != null;
     }
+
     private SecurityUser getUser() {
         return Optional.ofNullable(SecurityContextHolder.getContext())
                 .map(context -> context.getAuthentication())

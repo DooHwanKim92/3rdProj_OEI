@@ -49,6 +49,14 @@ public class ApiV1MemberController {
         );
     }
 
+    @PostMapping("/logout")
+    public RsData<Void> logout () {
+        rq.removeCrossDomainCookie("accessToken");
+        rq.removeCrossDomainCookie("refreshToken");
+
+        return RsData.of("200", "로그아웃 성공");
+    }
+
     @AllArgsConstructor
     @Getter
     public static class MeResponse {
