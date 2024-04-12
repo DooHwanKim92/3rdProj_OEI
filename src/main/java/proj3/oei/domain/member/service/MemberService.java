@@ -27,11 +27,12 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public Member join(String username, String password, String email) {
+    public Member join(String username, String password, String email, String address) {
         Member member = Member.builder()
                 .username(username)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .email(email)
+                .address(address)
                 .build();
 
         String refreshToken = jwtProvider.genRefreshToken(member);
@@ -44,6 +45,14 @@ public class MemberService {
 
     public Optional<Member> findById (Long id) {
         return this.memberRepository.findById(id);
+    }
+
+    public Optional<Member> findByEmail(String email) {
+        return this.memberRepository.findByEmail(email);
+    }
+
+    public Optional<Member> findByUsername(String username) {
+        return this.memberRepository.findByUsername(username);
     }
 
     @AllArgsConstructor

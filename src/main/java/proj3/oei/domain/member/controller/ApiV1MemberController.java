@@ -74,4 +74,60 @@ public class ApiV1MemberController {
                 new MeResponse(new MemberDto(member))
         );
     }
+
+    @Getter
+    public static class SignUpRequestBody {
+        @NotBlank
+        private String username;
+
+        @NotBlank
+        private String password1;
+
+        @NotBlank
+        private String password2;
+
+        @NotBlank
+        private String email;
+
+        @NotBlank
+        private String address;
+
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class SignUpResponseBody {
+        private final Member member;
+    }
+
+    @PostMapping("/signup")
+    public RsData<SignUpResponseBody> signUp(@Valid @RequestBody SignUpRequestBody signUpRequestBody) {
+        if(this.memberService.findByUsername(signUpRequestBody.getUsername()).isPresent()) {
+            return RsData.of(
+                    "F-11",
+                    "중복된 아이디"
+            );
+        }
+        if (!signUpRequestBody.getPassword1().equals(signUpRequestBody.getPassword2())) {
+            return RsData.of(
+                    "F-12",
+                    "비밀번호 2개 불일치"
+            );
+        }
+        if(this.memberService.findByEmail(signUpRequestBody.getEmail()).isPresent()) {
+            return RsData.of(
+                    "F-13",
+                    "중복된 이메일"
+            );
+        }
+        this.memberService.join(signUpRequestBody.getUsername(), signUpRequestBody.getPassword1(), signUpRequestBody.getEmail(), signUpRequestBody.getAddress());
+        Member member = this.memberService.findByUsername(signUpRequestBody.getUsername()).get();
+        return RsData.of(
+                "S-11",
+                "회원가입 성공",
+                new SignUpResponseBody(member)
+        );
+    }
+
+
 }

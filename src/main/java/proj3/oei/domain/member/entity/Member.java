@@ -25,11 +25,18 @@ import java.util.List;
 @AllArgsConstructor
 public class Member extends BaseEntity{
 
+    @Column(unique = true)
     private String username;
+
     @JsonIgnore
     private String password;
+
+    @Column(unique = true)
     private String email;
+
     private String refreshToken;
+
+    private String address;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();

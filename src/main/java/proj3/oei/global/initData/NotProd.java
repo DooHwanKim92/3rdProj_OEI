@@ -14,11 +14,11 @@ import proj3.oei.domain.member.service.MemberService;
 public class NotProd {
     @Bean
     CommandLineRunner initData(ArticleService articleService, MemberService memberService, PasswordEncoder passwordEncoder) {
-        String password = passwordEncoder.encode("1234");
+
         return args -> {
-            Member user1 = memberService.join("user1", password, "test@test.com");
-            Member user2 = memberService.join("user2", password, "test@test.com");
-            Member admin  = memberService.join("admin", password, "admin@test.com");
+            Member user1 = memberService.join("user1", "1234", "test1@test.com","address1");
+            Member user2 = memberService.join("user2", "1234", "test2@test.com","address2");
+            Member admin  = memberService.join("admin", "1234", "admin@test.com","address3");
 
 
             // 작성자 회원 추가

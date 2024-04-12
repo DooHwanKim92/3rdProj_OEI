@@ -7,11 +7,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import proj3.oei.domain.article.entity.Article;
 import proj3.oei.domain.article.service.ArticleService;
+import proj3.oei.domain.member.entity.Member;
+import proj3.oei.domain.member.service.MemberService;
 import proj3.oei.global.resultData.RsData;
+import proj3.oei.global.rq.Rq;
+import proj3.oei.global.security.SecurityUser;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +31,10 @@ import java.util.Optional;
 public class ApiV1ArticleController {
 
     private final ArticleService articleService;
+
+    private final Rq rq;
+
+    private final MemberService memberService;
 
     @Getter
     @AllArgsConstructor
@@ -77,7 +88,33 @@ public class ApiV1ArticleController {
 
     @PostMapping("")
     public RsData<CreateResponse> createArticle(@Valid @RequestBody CreateRequest createRequest) {
-        RsData<Article> createRs = this.articleService.create(null,createRequest.getTitle(), createRequest.getContent());
+        // 현재 사용자의 인증 객체 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Member member = null;
+
+        // 인증 객체가 null인지 확인하고, null이 아니라면 사용자 객체 가져오기
+        if (authentication != null && authentication.getPrincipal() instanceof SecurityUser) {
+            SecurityUser currentUser = (SecurityUser) authentication.getPrincipal();
+
+            // 추가적인 사용자 정보들...
+            if(this.memberService.findByUsername(currentUser.getUsername()).isEmpty()) {
+                member = null;
+            }
+
+            member = this.memberService.findByUsername(currentUser.getUsername()).get();
+
+        }
+
+        else {
+            // 사용자가 로그인하지 않은 경우 처리
+            return RsData.of(
+                    "F-21",
+                    "로그인 필요"
+            );
+        }
+
+        RsData<Article> createRs = this.articleService.create(member,createRequest.getTitle(), createRequest.getContent());
 
         if (createRs.isFail()) return (RsData) createRs;
 
