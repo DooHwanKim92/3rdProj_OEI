@@ -16,8 +16,6 @@ export default function About() {
         .then(result => setMember(result.data.memberDto))
     }, [])
 
-
-
     return (
 
         <>

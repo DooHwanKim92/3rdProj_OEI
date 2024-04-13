@@ -1,6 +1,8 @@
 'use client'
 
+import { useCookies } from "react-cookie"
 import { Fragment, useState, useEffect } from 'react'
+import { NextResponse, type NextRequest } from "next/server";
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
   ArrowPathIcon,
@@ -32,11 +34,14 @@ function classNames(...classes) {
 
 export default function HeaderSection() {
 
+  const { nextUrl, cookies } = request;
+  const accessToken = cookies.get(ACCESS_TOKEN_KEY);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const router = useRouter();
-
-  let isLoggedIn = false;
 
   const handleLogout = async () => {
     const response = await fetch("http://localhost:8090/api/v1/members/logout", {
@@ -49,7 +54,7 @@ export default function HeaderSection() {
 
     if (response.ok) {
         alert("ok")
-        isLoggedIn = false;
+        setIsLoggedIn(false);
         router.push("/")
     } else {
         alert("fail")
