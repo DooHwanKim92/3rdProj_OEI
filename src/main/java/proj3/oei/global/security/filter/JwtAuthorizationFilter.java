@@ -24,52 +24,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-//    private final JwtProvider jwtProvider;
-
     private final MemberService memberService;
 
     private final Rq rq;
-
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, IOException {
-//        // 헤더에서 Authorization 값을 가져온다.
-//        String bearerToken = request.getHeader("Authorization");
-//
-//        if (bearerToken != null) {
-//            String token = bearerToken.substring("Bearer ".length());
-//
-//            if (jwtProvider.verify(token)) {
-//                Map<String, Object> claims = jwtProvider.getClaims(token);
-//                long id = (int)claims.get("id");
-//
-//                Member member = memberService.findById(id).orElseThrow();
-//
-//                forceAuthentication(member);
-//            }
-//        }
-//
-//        filterChain.doFilter(request, response);
-//    }
-//
-//    // 강제로 로그인 처리하는 메소드
-//    private void forceAuthentication(Member member) {
-//        User user = new User(member.getUsername(), member.getPassword(), member.getAuthorities());
-//
-//        // 스프링 시큐리티 객체에 저장할 authentication 객체를 생성
-//        UsernamePasswordAuthenticationToken authentication =
-//                UsernamePasswordAuthenticationToken.authenticated(
-//                        user,
-//                        null,
-//                        member.getAuthorities()
-//                );
-//
-//        // 스프링 시큐리티 내에 우리가 만든 authentication 객체를 저장할 context 생성
-//        SecurityContext context = SecurityContextHolder.createEmptyContext();
-//        // context에 authentication 객체를 저장
-//        context.setAuthentication(authentication);
-//        // 스프링 시큐리티에 context를 등록
-//        SecurityContextHolder.setContext(context);
-//    }
 
     @SneakyThrows
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
