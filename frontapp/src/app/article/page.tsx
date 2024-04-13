@@ -70,11 +70,13 @@ export default function Article () {
 
     return (
         <>  
+        
             <ArticleForm fetchArticle={fetchArticle} />
             <ul>
                 게시물 리스트
-                {articles.map((article) => <li> <Link href={`/article/${article.id}`}>{article.id}</Link> / {article.title}
-                                                
+                {articles.map((article) => <li key={article.id}><Link href={`/article/${article.id}`}>{article.id}</Link> / {article.title} 
+                                                / 
+                                                {/* {article.author.username} */}
                                                 
                                             </li>)}
             </ul>

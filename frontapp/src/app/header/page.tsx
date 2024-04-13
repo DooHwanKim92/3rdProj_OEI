@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
   ArrowPathIcon,
@@ -12,6 +12,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+import { useParams, useRouter } from "next/navigation";
 
 const products = [
   { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
@@ -30,7 +31,31 @@ function classNames(...classes) {
 }
 
 export default function HeaderSection() {
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const router = useRouter();
+
+  let isLoggedIn = false;
+
+  const handleLogout = async () => {
+    const response = await fetch("http://localhost:8090/api/v1/members/logout", {
+        method: 'POST',
+        credentials: 'include', // 핵심 변경점
+        headers: {
+            'Content-Type': 'application/json' 
+        }
+    })
+
+    if (response.ok) {
+        alert("ok")
+        isLoggedIn = false;
+        router.push("/")
+    } else {
+        alert("fail")
+    }
+  }
+ 
 
   return (
     <header className="bg-white">
@@ -54,7 +79,7 @@ export default function HeaderSection() {
         <Popover.Group className="hidden lg:flex lg:gap-x-12">
           <Popover className="relative">
             <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-              중고거래
+              동네생활
               <ChevronDownIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
             </Popover.Button>
 
@@ -103,20 +128,27 @@ export default function HeaderSection() {
             </Transition>
           </Popover>
 
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            동네생활
+          <a href="/article" className="text-sm font-semibold leading-6 text-gray-900">
+            중고거래
           </a>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            아르바이트
+            메뉴1
           </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            (검색창으로 변경예정)
+          <a href="/about" className="text-sm font-semibold leading-6 text-gray-900">
+            나의정보
           </a>
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
+          <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
+            로그인 <span aria-hidden="true">&rarr;</span>
           </a>
+          <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
+            로그아웃 <span aria-hidden="true">&rarr;</span>
+          </button>
+          
+          
+          
+          
         </div>
       </nav>
       <Dialog as="div" className="lg:hidden" open={mobileMenuOpen} onClose={setMobileMenuOpen}>
@@ -147,7 +179,7 @@ export default function HeaderSection() {
                   {({ open }) => (
                     <>
                       <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                        Product
+                        동네생활
                         <ChevronDownIcon
                           className={classNames(open ? 'rotate-180' : '', 'h-5 w-5 flex-none')}
                           aria-hidden="true"
@@ -169,30 +201,30 @@ export default function HeaderSection() {
                   )}
                 </Disclosure>
                 <a
-                  href="#"
+                  href="/article"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Features
+                  중고거래
                 </a>
                 <a
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Marketplace
+                  메뉴1
                 </a>
                 <a
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Company
+                  메뉴2
                 </a>
               </div>
               <div className="py-6">
                 <a
-                  href="#"
+                  href="/login"
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Log in
+                  로그인
                 </a>
               </div>
             </div>

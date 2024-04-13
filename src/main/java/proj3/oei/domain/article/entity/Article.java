@@ -2,11 +2,13 @@ package proj3.oei.domain.article.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import proj3.oei.domain.member.entity.Member;
 import proj3.oei.global.jpa.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -18,6 +20,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Article extends BaseEntity {
+
+
+    @ManyToOne
+    private Member author;
 
     @Column
     private String title;

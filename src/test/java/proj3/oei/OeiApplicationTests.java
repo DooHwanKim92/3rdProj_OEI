@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import proj3.oei.global.jwt.JwtProvider;
 
 import javax.crypto.SecretKey;
@@ -108,8 +110,5 @@ class OeiApplicationTests {
 	}
 
 
-	@Test
-	void contextLoads() {
 
-	}
 }

@@ -7,11 +7,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import proj3.oei.domain.article.entity.Article;
 import proj3.oei.domain.article.service.ArticleService;
+import proj3.oei.domain.member.entity.Member;
+import proj3.oei.domain.member.service.MemberService;
 import proj3.oei.global.resultData.RsData;
+import proj3.oei.global.rq.Rq;
+import proj3.oei.global.security.SecurityUser;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +32,10 @@ import java.util.Optional;
 public class ApiV1ArticleController {
 
     private final ArticleService articleService;
+
+    private final Rq rq;
+
+    private final MemberService memberService;
 
     @Getter
     @AllArgsConstructor
@@ -77,7 +89,10 @@ public class ApiV1ArticleController {
 
     @PostMapping("")
     public RsData<CreateResponse> createArticle(@Valid @RequestBody CreateRequest createRequest) {
-        RsData<Article> createRs = this.articleService.create(createRequest.getTitle(), createRequest.getContent());
+
+        Member member = rq.getMember();
+
+        RsData<Article> createRs = this.articleService.create(member,createRequest.getTitle(), createRequest.getContent());
 
         if (createRs.isFail()) return (RsData) createRs;
 
