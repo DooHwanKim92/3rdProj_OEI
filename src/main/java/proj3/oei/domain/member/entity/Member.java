@@ -1,6 +1,7 @@
 package proj3.oei.domain.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -44,4 +45,5 @@ public class Member extends BaseEntity{
 
         return authorities;
     }
+
 }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -88,31 +89,8 @@ public class ApiV1ArticleController {
 
     @PostMapping("")
     public RsData<CreateResponse> createArticle(@Valid @RequestBody CreateRequest createRequest) {
-        // 현재 사용자의 인증 객체 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        Member member = null;
-
-        // 인증 객체가 null인지 확인하고, null이 아니라면 사용자 객체 가져오기
-        if (authentication != null && authentication.getPrincipal() instanceof SecurityUser) {
-            SecurityUser currentUser = (SecurityUser) authentication.getPrincipal();
-
-            // 추가적인 사용자 정보들...
-            if(this.memberService.findByUsername(currentUser.getUsername()).isEmpty()) {
-                member = null;
-            }
-
-            member = this.memberService.findByUsername(currentUser.getUsername()).get();
-
-        }
-
-        else {
-            // 사용자가 로그인하지 않은 경우 처리
-            return RsData.of(
-                    "F-21",
-                    "로그인 필요"
-            );
-        }
+        Member member = rq.getMember();
 
         RsData<Article> createRs = this.articleService.create(member,createRequest.getTitle(), createRequest.getContent());
 

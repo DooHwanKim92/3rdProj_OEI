@@ -75,7 +75,8 @@ export default function Article () {
             <ul>
                 게시물 리스트
                 {articles.map((article) => <li key={article.id}><Link href={`/article/${article.id}`}>{article.id}</Link> / {article.title} 
-                                                / {article.author.username}
+                                                / 
+                                                {/* {article.author.username} */}
                                                 
                                             </li>)}
             </ul>
