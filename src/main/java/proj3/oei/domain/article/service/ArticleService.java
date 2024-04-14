@@ -27,8 +27,9 @@ public class ArticleService {
 
     @Transactional
     // 예외 발생 시 rollback 해준다
-    public RsData<Article> create(Member member, String title, String content) {
+    public RsData<Article> create(String category,Member member, String title, String content) {
         Article article = Article.builder()
+                .category(category)
                 .author(member)
                 .title(title)
                 .content(content)

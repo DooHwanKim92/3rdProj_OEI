@@ -5,9 +5,21 @@ import { useRouter } from "next/navigation";
 // 게시글 등록
 export default function ArticleForm () {
 
-  const [article, setArticle] = useState({title: '', content: ''})
+    const [categories, setCategory] = useState([])
+    
+    useEffect(() => {
+        fetchArticle()
+    }, [])
 
-  const router = useRouter();
+    const fetchArticle = () => {
+        fetch("http://localhost:8090/api/v1/categories")
+            .then(row => row.json())
+            .then(row => setCategory(row.data.categories))
+    }
+
+    const [article, setArticle] = useState({category: '', title: '', content: ''})
+
+    const router = useRouter();
 
   const handleSubmit = async (e) => {
       e.preventDefault();
@@ -37,15 +49,24 @@ export default function ArticleForm () {
       console.log({ ...article, [name]: value })
   }
 
-  return (
-      <>
-          <form onSubmit={handleSubmit} enctype="multipart/form-data">
-              <input type="text" name="title" value={article.title} onChange={handleChange} />
-              <input type="text" name="content" value={article.content} onChange={handleChange}/>
-              <button type="submit">등록</button>
-          </form>
-      </>
-  )
+    return (
+    <>
+        <form onSubmit={handleSubmit}>
+
+            <select name="category" aria-label="Default select example" onChange={handleChange}>
+                <option value="">카테고리 선택</option>
+                {categories.map((category) => <option key={category.id} value={category.name}>{category.name} 
+                                            </option>)}
+            </select>
+
+
+
+            <input type="text" name="title" value={article.title} onChange={handleChange} />
+            <input type="text" name="content" value={article.content} onChange={handleChange}/>
+            <button type="submit">등록</button>
+        </form>
+    </>
+    )
 }
 
 

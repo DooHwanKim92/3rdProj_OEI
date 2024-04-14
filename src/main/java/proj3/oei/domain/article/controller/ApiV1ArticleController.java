@@ -72,8 +72,9 @@ public class ApiV1ArticleController {
     // @Data = getter, setter 등 자주 사용하는 어노테이션 패키징
     // 매핑된 메서드에서 @RequestBody로 받은 Json객체를 담는 객체
     public static class CreateRequest {
+
+        private String category;
         @NotBlank
-        // @Valid
         private String title;
         @NotBlank
         private String content;
@@ -93,10 +94,10 @@ public class ApiV1ArticleController {
 
         Member member = rq.getMember();
 
-        RsData<Article> createRs = this.articleService.create(member,createRequest.getTitle(), createRequest.getContent());
+        RsData<Article> createRs = this.articleService.create(createRequest.getCategory(), member,createRequest.getTitle(), createRequest.getContent());
 
 //        if (createRs.isFail()) return (RsData) createRs;
-//        왜 되는거지?? 왜 안됐던거여
+//        // 왜 되는거지?? 왜 안됐던거여
 //        return RsData.of(
 //                createRs.getResultCode(),
 //                createRs.getMsg(),
