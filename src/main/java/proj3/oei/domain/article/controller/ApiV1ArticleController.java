@@ -11,6 +11,7 @@ import org.hibernate.Hibernate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import proj3.oei.domain.article.entity.Article;
 import proj3.oei.domain.article.service.ArticleService;
 import proj3.oei.domain.member.entity.Member;
@@ -19,6 +20,7 @@ import proj3.oei.global.resultData.RsData;
 import proj3.oei.global.rq.Rq;
 import proj3.oei.global.security.SecurityUser;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -78,6 +80,7 @@ public class ApiV1ArticleController {
         private String title;
         @NotBlank
         private String content;
+
     }
 
     @Getter
@@ -90,6 +93,7 @@ public class ApiV1ArticleController {
 
     @PostMapping("")
     // RsData<CreateResponse>
+    // @RequestParam(value = "img") MultipartFile img) throws IOException
     public void createArticle(@Valid @RequestBody CreateRequest createRequest) {
 
         Member member = rq.getMember();
