@@ -1,14 +1,20 @@
 'use client'
+
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation";
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
+import DaumPostcode from 'react-daum-postcode';
+import { Modal, Button } from "antd";
 
 export default function SignUp() {
 
   const router = useRouter();
 
   const [member, setMember] = useState({username: '', password1: '', password2 :'', email:'',address:''})
+
+  const [error, setError] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,22 +25,25 @@ export default function SignUp() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(member)
+    }).then(row => row.json())
+      .then(row => {setError(row.resultCode)
+
+        if (row.resultCode.startsWith('S')) {
+          alert('회원가입 성공');
+          router.push("/")
+        } else {
+          alert(row.msg);
+        }
     });
 
-    if (response.ok) {
-        alert('회원가입 성공');
-        router.push("/")
-    } else {
-        alert('회원가입 실패');
-    }
+  }
 
-}
-
-const handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setMember({ ...member, [name]: value });
-}
-  
+  }
+
+
   return (
     <div className="bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -48,7 +57,7 @@ const handleChange = (e) => {
           <div className="border-b border-gray-900/10 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
-            <div className="sm:col-span-4">
+            <div className="sm:col-span-full">
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 아이디
               </label>
@@ -66,7 +75,7 @@ const handleChange = (e) => {
                 중복확인</button>
             </div>
 
-            <div className="sm:col-span-4">
+            <div className="sm:col-span-full">
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 이메일
               </label>
@@ -84,7 +93,7 @@ const handleChange = (e) => {
                 중복확인</button>
             </div>
 
-            <div className="sm:col-span-4">
+            <div className="sm:col-span-full">
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 비밀번호
               </label>
@@ -100,7 +109,7 @@ const handleChange = (e) => {
               </div>
             </div>
 
-            <div className="sm:col-span-4">
+            <div className="sm:col-span-full">
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 비밀번호 확인
               </label>
@@ -116,7 +125,7 @@ const handleChange = (e) => {
               </div>
             </div>
 
-            <div className="sm:col-span-4">
+            <div className="sm:col-span-full">
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 주소
               </label>
@@ -218,9 +227,9 @@ const handleChange = (e) => {
       </div>
 
       <div className="mt-6 flex items-center justify-end gap-x-6">
-        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+        <a href="/" className="text-sm font-semibold leading-6 text-gray-900">
           돌아가기
-        </button>
+        </a>
         <button
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
