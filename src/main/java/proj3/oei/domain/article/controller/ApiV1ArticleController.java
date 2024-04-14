@@ -88,19 +88,20 @@ public class ApiV1ArticleController {
     }
 
     @PostMapping("")
-    public RsData<CreateResponse> createArticle(@Valid @RequestBody CreateRequest createRequest) {
+    // RsData<CreateResponse>
+    public void createArticle(@Valid @RequestBody CreateRequest createRequest) {
 
         Member member = rq.getMember();
 
         RsData<Article> createRs = this.articleService.create(member,createRequest.getTitle(), createRequest.getContent());
 
-        if (createRs.isFail()) return (RsData) createRs;
-
-        return RsData.of(
-                createRs.getResultCode(),
-                createRs.getMsg(),
-                new CreateResponse(createRs.getData())
-        );
+//        if (createRs.isFail()) return (RsData) createRs;
+//        왜 되는거지?? 왜 안됐던거여
+//        return RsData.of(
+//                createRs.getResultCode(),
+//                createRs.getMsg(),
+//                new CreateResponse(createRs.getData())
+//        );
     }
 
     @Data

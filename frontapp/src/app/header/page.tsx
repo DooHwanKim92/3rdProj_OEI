@@ -34,10 +34,7 @@ function classNames(...classes) {
 
 export default function HeaderSection() {
 
-  const { nextUrl, cookies } = request;
-  const accessToken = cookies.get(ACCESS_TOKEN_KEY);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -54,7 +51,6 @@ export default function HeaderSection() {
 
     if (response.ok) {
         alert("ok")
-        setIsLoggedIn(false);
         router.push("/")
     } else {
         alert("fail")
@@ -150,6 +146,12 @@ export default function HeaderSection() {
           <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
             로그아웃 <span aria-hidden="true">&rarr;</span>
           </button>
+
+          {getTokenCookie() ? (
+        <button>로그아웃</button>
+      ) : (
+         <button>로그인</button>
+      )}
           
           
           
@@ -238,4 +240,14 @@ export default function HeaderSection() {
       </Dialog>
     </header>
   )
+}
+
+
+export function getTokenCookie() {
+  const cookies = document.cookie.split(';'); // 모든 쿠키를 가져옵니다.
+  const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('accessToken=')); // accessToken 쿠키를 찾습니다.
+  if (!tokenCookie) {
+    return null; // 토큰이 없으면 null을 반환합니다.
+  }
+  return tokenCookie.split('=')[1]; // 토큰 값을 반환합니다.
 }
