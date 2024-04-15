@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/articles")
 public class ApiV1ArticleController {
+
+    @Value("${custom.fileDirPath}")
+    private String filePath;
 
     private final ArticleService articleService;
 

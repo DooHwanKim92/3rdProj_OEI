@@ -43,7 +43,7 @@ public class ArticleService {
         String thunmail = "";
 
         if (img.isEmpty()) {
-            thumnailPath = "/images/기본이미지.jpg";
+            thumnailPath = "/기본이미지.jpg";
         } else if (!img.isEmpty()) {
             thunmail = "article/" + UUID.randomUUID().toString() + ".jpg";
             File representImgFile = new File(fileDirPath + "/" + thunmail);

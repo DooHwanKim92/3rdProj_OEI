@@ -69,6 +69,13 @@ public class ApiV1MemberController {
     public RsData<MeResponse> getMe () {
         Member member = rq.getMember();
 
+        if (member == null) {
+            return RsData.of(
+                    "F-2",
+                    "유저 정보를 받아올 수 없습니다."
+            );
+        }
+
         return RsData.of(
                 "S-2",
                 "성공",

@@ -2,10 +2,13 @@
 
 import {useEffect, useState} from "react";
 import {PaperClipIcon} from '@heroicons/react/20/solid'
+import { useRouter } from "next/navigation";
 
 export default function About() {
 
     const [member, setMember] = useState({});
+
+    const router = useRouter();
 
     useEffect(() => {
         fetch('http://localhost:8090/api/v1/members/me', {
@@ -13,7 +16,14 @@ export default function About() {
             credentials: 'include', // 핵심 변경점
         })
             .then(result => result.json())
-            .then(result => setMember(result.data.memberDto))
+            .then(result => {
+                if (result.resultCode.startsWith('S')) {
+                    setMember(result.data.memberDto);
+                }
+                if (result.resultCode.startsWith('F')) {
+                    router.push("/login")
+                }      
+            });
     }, [])
 
     return (

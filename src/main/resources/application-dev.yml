@@ -22,3 +22,4 @@ spring:
     defer-datasource-initialization: true
 custom:
   fileDirPath: C:\oei\file_upload
+  basicImgPath : src/main/resources/static/기본이미지.jpg

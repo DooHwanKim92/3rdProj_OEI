@@ -1,6 +1,5 @@
 'use client'
 
-import { Cookies } from "react-cookie";
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
@@ -31,20 +30,30 @@ function classNames(...classes) {
 
 export default function HeaderSection() {
 
-  const cookies = new Cookies();
+const [member, setMember] = useState(null);
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+useEffect(() => {
+  fetch('http://localhost:8090/api/v1/members/me', {
+            method: 'GET',
+            credentials: 'include', // 핵심 변경점
+        })
+      .then(result => result.json())
+      .then(result => {
+          if (result.resultCode.startsWith('S')) {
+            setIsLoggedIn(true);
+          }
+          if (result.resultCode.startsWith('F')) {
+            setIsLoggedIn(false);
+          }
+      })
+}, []); // 이펙트의 의존성 배열은 빈 배열로 설정하여 컴포넌트가 처음 렌더링될 때 한 번만 실행되도록 합니다.
+
+  
+
   const router = useRouter();
 
-  useEffect(() => {
-    const accessToken = cookies.get("accessToken");
-
-    if (!accessToken) {
-      // router.push("/login");
-    }
-  }, [cookies]);
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  // const router = useRouter();
 
   const handleLogout = async () => {
     const response = await fetch("http://localhost:8090/api/v1/members/logout", {
@@ -57,6 +66,7 @@ export default function HeaderSection() {
 
     if (response.ok) {
         alert("ok")
+        setIsLoggedIn(false);
         router.push("/")
     } else {
         alert("fail")
@@ -146,14 +156,19 @@ export default function HeaderSection() {
           </a>
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
-            로그인 <span aria-hidden="true">&rarr;</span>
-          </a>
-          <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
+          {isLoggedIn ? <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
             로그아웃 <span aria-hidden="true">&rarr;</span>
-          </button>
+          </button> : <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
+            로그인 <span aria-hidden="true">&rarr;</span>
+          </a>}
           
           
+          <div>
+            비상용버튼
+            <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
+              로그아웃 <span aria-hidden="true">&rarr;</span>
+            </button>
+          </div>
           
           
         </div>

@@ -18,11 +18,13 @@ public class MemberDto {
     private String address;
 
     public MemberDto(Member member) {
-        this.id = member.getId();
-        this.username = member.getUsername();
-        this.email = member.getEmail();
-        this.address = member.getAddress();
-        this.createdDate = member.getCreateDate();
-        this.modifiedDate = member.getModifiedDate();
+
+            this.id = member.getId();
+            this.username = member.getUsername();
+            this.email = member.getEmail();
+            this.address = member.getAddress();
+            this.createdDate = member.getCreateDate();
+            this.modifiedDate = member.getModifiedDate();
+
     }
 }
