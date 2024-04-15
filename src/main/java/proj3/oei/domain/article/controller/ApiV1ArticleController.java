@@ -93,12 +93,15 @@ public class ApiV1ArticleController {
 
     @PostMapping("")
     // RsData<CreateResponse>
-    // @RequestParam(value = "img") MultipartFile img) throws IOException
-    public void createArticle(@Valid @RequestBody CreateRequest createRequest) {
+    // @RequestBody CreateRequest createRequest
+    public void createArticleTest(@Valid @RequestParam(value = "title") String title,
+                                  @RequestParam(value = "content") String content,
+                                  @RequestParam(value = "category") String category,
+                                  @RequestParam(value = "img") MultipartFile img) throws IOException {
 
         Member member = rq.getMember();
 
-        RsData<Article> createRs = this.articleService.create(createRequest.getCategory(), member,createRequest.getTitle(), createRequest.getContent());
+        RsData<Article> createRs = this.articleService.create(category, member,title, content, img);
 
 //        if (createRs.isFail()) return (RsData) createRs;
 //        // 왜 되는거지?? 왜 안됐던거여

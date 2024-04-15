@@ -34,6 +34,8 @@ public class Article extends BaseEntity {
     @Column
     private String location;
 
+    private String imgPath;
+
 
 
 }

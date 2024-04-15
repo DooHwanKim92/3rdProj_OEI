@@ -10,6 +10,9 @@ import proj3.oei.domain.category.service.CategoryService;
 import proj3.oei.domain.member.entity.Member;
 import proj3.oei.domain.member.service.MemberService;
 
+import java.io.IOException;
+import java.nio.file.*;
+
 @Configuration
 @Profile({"dev", "test"})
 public class NotProd {
@@ -27,12 +30,22 @@ public class NotProd {
             categoryService.create("카테고리4");
             categoryService.create("카테고리5");
 
-            // 작성자 회원 추가
-            articleService.create("카테고리1",user1,"제목 1", "내용 1");
-            articleService.create("카테고리2",user1,"제목 2", "내용 2");
-            articleService.create("카테고리3",user2,"제목 3", "내용 3");
-            articleService.create("카테고리4",user2,"제목 4", "내용 4");
-            articleService.create("카테고리5",admin,"제목 5", "내용 5");
+
+            Path directoryArticle = Paths.get("C:\\oei\\file_upload\\article");
+            Path directoryReview = Paths.get("C:\\oei\\file_upload\\review");
+            Path directoryQuestion = Paths.get("C:\\oei\\file_upload\\question");
+
+            try {
+                Files.createDirectories(directoryArticle);
+                Files.createDirectories(directoryReview);
+                Files.createDirectories(directoryQuestion);
+            } catch (FileAlreadyExistsException e) {
+                System.out.println("디렉토리가 이미 존재합니다");
+            } catch (NoSuchFileException e) {
+                System.out.println("디렉토리 경로가 존재하지 않습니다");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         };
     }
 }
