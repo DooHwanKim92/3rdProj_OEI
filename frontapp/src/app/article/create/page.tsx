@@ -58,7 +58,7 @@ export default function ArticleForm () {
                 게시글 작성하기
                 </h2>
             </div>
-        <form onSubmit={handleSubmit} enctype="multipart/form-data">
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
 
             카테고리
             <select name="category" aria-label="Default select example" 
