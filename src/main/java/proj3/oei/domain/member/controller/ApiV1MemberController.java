@@ -95,6 +95,9 @@ public class ApiV1MemberController {
         private String password2;
 
         @NotBlank
+        private String nickname;
+
+        @NotBlank
         private String email;
 
         @NotBlank
@@ -122,6 +125,12 @@ public class ApiV1MemberController {
                     "중복된 아이디입니다."
             );
         }
+        if(this.memberService.findByNickname(signUpRequestBody.getNickname()).isPresent()) {
+            return RsData.of(
+                    "F-11-0",
+                    "중복된 닉네임입니다."
+            );
+        }
         if (!signUpRequestBody.getPassword1().equals(signUpRequestBody.getPassword2())) {
             return RsData.of(
                     "F-12",
@@ -134,7 +143,7 @@ public class ApiV1MemberController {
                     "중복된 이메일입니다."
             );
         }
-        this.memberService.join(signUpRequestBody.getUsername(), signUpRequestBody.getPassword1(), signUpRequestBody.getEmail(), signUpRequestBody.getAddress());
+        this.memberService.join(signUpRequestBody.getUsername(), signUpRequestBody.getPassword1(), signUpRequestBody.getEmail(), signUpRequestBody.getAddress(), signUpRequestBody.getNickname());
         Member member = this.memberService.findByUsername(signUpRequestBody.getUsername()).get();
         return RsData.of(
                 "S-11",

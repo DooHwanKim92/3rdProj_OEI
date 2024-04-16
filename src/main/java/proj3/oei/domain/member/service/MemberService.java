@@ -27,12 +27,13 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public Member join(String username, String password, String email, String address) {
+    public Member join(String username, String password, String email, String address, String nickname) {
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .email(email)
                 .address(address)
+                .nickname(nickname)
                 .build();
 
         String refreshToken = jwtProvider.genRefreshToken(member);
@@ -53,6 +54,10 @@ public class MemberService {
 
     public Optional<Member> findByUsername(String username) {
         return this.memberRepository.findByUsername(username);
+    }
+
+    public Optional<Member> findByNickname(String nickname) {
+        return this.memberRepository.findByNickname(nickname);
     }
 
     @AllArgsConstructor

@@ -55,7 +55,6 @@ export default function ArticleDetail() {
     
     return (
         <>
-        
             Article Detail{params.id} Page
             <div>
                 {article.id} / {article.title} / {article.content}

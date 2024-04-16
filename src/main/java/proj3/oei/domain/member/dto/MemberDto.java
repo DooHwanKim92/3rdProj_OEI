@@ -16,6 +16,7 @@ public class MemberDto {
     private LocalDateTime modifiedDate;
     private String email;
     private String address;
+    private String nickname;
 
     public MemberDto(Member member) {
 
@@ -25,6 +26,7 @@ public class MemberDto {
             this.address = member.getAddress();
             this.createdDate = member.getCreateDate();
             this.modifiedDate = member.getModifiedDate();
+            this.nickname = member.getNickname();
 
     }
 }

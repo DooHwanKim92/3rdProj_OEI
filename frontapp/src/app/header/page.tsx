@@ -31,7 +31,6 @@ function classNames(...classes) {
 
 export default function HeaderSection() {
 
-const [member, setMember] = useState(null);
 const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 useEffect(() => {
@@ -48,9 +47,7 @@ useEffect(() => {
             setIsLoggedIn(false);
           }
       })
-}, []); // 이펙트의 의존성 배열은 빈 배열로 설정하여 컴포넌트가 처음 렌더링될 때 한 번만 실행되도록 합니다.
-
-  
+}, [isLoggedIn]); // 이펙트의 의존성 배열은 빈 배열로 설정하여 컴포넌트가 처음 렌더링될 때 한 번만 실행되도록 합니다.
 
   const router = useRouter();
 
@@ -158,7 +155,7 @@ useEffect(() => {
           <a href="/about" className="text-sm font-semibold leading-6 text-gray-900">
             나의정보
           </a>
-          
+
         </Popover.Group>
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
