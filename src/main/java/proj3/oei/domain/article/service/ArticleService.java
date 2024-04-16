@@ -49,7 +49,7 @@ public class ArticleService {
             File representImgFile = new File(fileDirPath + "/" + thunmail);
             img.transferTo(representImgFile);
             thumnailPath = "http://localhost:8090/file/" + thunmail;
-        }
+        }   // 프론트(localhost:3000)랑 주소가 달라서 백엔드 주소를 경로에 함께 입력해줘야됨
 
 
         Article article = Article.builder()

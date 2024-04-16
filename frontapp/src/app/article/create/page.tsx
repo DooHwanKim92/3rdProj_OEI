@@ -2,11 +2,63 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+// 위,경도 위치 조회
+interface locationType {
+  loaded: boolean;
+  coordinates?: { lat: number; lng: number };
+  error?: { code: number; message: string };
+}
+
+const useGeolocation = () => {
+  const [location, setLocation] = useState<locationType>({
+    loaded: false,
+    coordinates: { lat: 0, lng: 0, }
+  })
+
+  // 성공에 대한 로직
+  const onSuccess = (location: { coords: { latitude: number; longitude: number; }; }) => {
+    setLocation({
+      loaded: true,
+      coordinates: {
+        lat: location.coords.latitude, // 위도
+        lng: location.coords.longitude, // 경도
+      }
+    })
+  }
+
+  // 에러에 대한 로직
+  const onError = (error: { code: number; message: string; }) => {
+    setLocation({
+      loaded: true,
+      error,
+    })
+  }
+
+  useEffect(() => {
+    // navigator 객체 안에 geolocation이 없다면
+    // 위치 정보가 없는 것.
+    if (!("geolocation" in navigator)) {
+      onError({
+        code: 0,
+        message: "Geolocation not supported",
+      })
+    }
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+  }, [])
+
+  return location;
+}
+// 위,경도 위치 조회 끝
+
+
+
 // 게시글 등록
-export default function ImgUploadTest() {
+export default function CreateArticleForm() {
   const [categories, setCategory] = useState([]);
-  const [article, setArticle] = useState({ category: "", title: "", content: "", img: null });
+  const [article, setArticle] = useState({ category: "", title: "", content: "", img: null ,located:""});
   const router = useRouter();
+  // 위치 조회 함수 호출
+  const location = useGeolocation();
 
   useEffect(() => {
     fetchCategories();
@@ -56,6 +108,31 @@ export default function ImgUploadTest() {
     setArticle({ ...article, img: imageFile });
   };
 
+  // // 조회한 위,경도로 카카오 API 요청 보내서 주소 찾기
+  // const lat = location.coordinates.lat;
+  // const lon = location.coordinates.lng;
+
+  // useEffect(() => {
+  //   fetchLocation(lat,lon)
+  // }, [])
+
+  // const fetchLocation = (lat,lon) => {
+
+  //   fetch(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lon}&y=${lat}&input_coord=WGS84`, {
+  //     headers: {
+  //       'Authorization':'KakaoAK {INPUT_KAKAO_REST_API_KEY}}'
+  //     }
+  //   })
+  //       .then(row => row.json())
+  //       .then(row => setArticle(prevState => ({
+  //         ...prevState,
+  //         located: row.road_address.region_3depth_name
+  //     })))
+  // }
+
+  // // row.road_address.region_3depth_name
+  
+
   return (
     <div className="bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -103,6 +180,13 @@ export default function ImgUploadTest() {
           onChange={handleImageChange}
         />
         <br></br>
+        <div>위치
+          <div>
+          {location.loaded
+            ? JSON.stringify(location)
+            : "Location data not available yet."}
+          </div>
+        </div>
         <button
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

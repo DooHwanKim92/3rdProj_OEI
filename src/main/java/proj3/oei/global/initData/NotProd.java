@@ -24,11 +24,10 @@ public class NotProd {
             Member user2 = memberService.join("user2", "1234", "test2@test.com","address2");
             Member admin  = memberService.join("admin", "1234", "admin@test.com","address3");
 
-            categoryService.create("카테고리1");
-            categoryService.create("카테고리2");
-            categoryService.create("카테고리3");
-            categoryService.create("카테고리4");
-            categoryService.create("카테고리5");
+            categoryService.create("판매");
+            categoryService.create("구매");
+            categoryService.create("대여");
+            categoryService.create("무료나눔");
 
 
             Path directoryArticle = Paths.get("C:\\oei\\file_upload\\article");

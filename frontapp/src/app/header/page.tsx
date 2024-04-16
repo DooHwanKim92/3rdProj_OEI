@@ -18,6 +18,7 @@ const products = [
   { name: '모임', description: '가까운 동네 이웃과 친해져보세요 😊', href: '#', icon: ChartPieIcon },
   { name: '아르바이트', description: '구인/구직은 여기서 한 번에 🏃‍♂️', href: '#', icon: CursorArrowRaysIcon },
   { name: '부동산', description: '내가 살고 싶은 집이 모두 여기에 🏠', href: '#', icon: FingerPrintIcon },
+  { name: '프리토크', description: '자유롭게 이야기 해보세요 👂', href: '#', icon: SquaresPlusIcon },
 ]
 const callsToAction = [
   { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
@@ -36,7 +37,7 @@ const [isLoggedIn, setIsLoggedIn] = useState(false);
 useEffect(() => {
   fetch('http://localhost:8090/api/v1/members/me', {
             method: 'GET',
-            credentials: 'include', // 핵심 변경점
+            credentials: 'include', // ← 이걸 해줘야 서버에서 유저 조회가 됨
         })
       .then(result => result.json())
       .then(result => {
@@ -151,10 +152,15 @@ useEffect(() => {
           <a href="/question" className="text-sm font-semibold leading-6 text-gray-900">
             문의하기
           </a>
+          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+            채팅
+          </a>
           <a href="/about" className="text-sm font-semibold leading-6 text-gray-900">
             나의정보
           </a>
+          
         </Popover.Group>
+
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {isLoggedIn ? <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
             로그아웃 <span aria-hidden="true">&rarr;</span>

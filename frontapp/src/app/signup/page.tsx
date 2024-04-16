@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import DaumPostcode from 'react-daum-postcode';
 import { Modal, Button } from "antd";
+import DaumPostcodePage from "./daumapi";
 
 export default function SignUp() {
 
@@ -35,7 +36,6 @@ export default function SignUp() {
           alert(row.msg);
         }
     });
-
   }
 
   const handleChange = (e) => {

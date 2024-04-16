@@ -36,6 +36,4 @@ public class Article extends BaseEntity {
 
     private String imgPath;
 
-
-
 }
