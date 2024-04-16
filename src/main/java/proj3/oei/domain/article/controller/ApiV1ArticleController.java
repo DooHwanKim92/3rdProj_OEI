@@ -101,11 +101,12 @@ public class ApiV1ArticleController {
     public void createArticleTest(@Valid @RequestParam(value = "title") String title,
                                   @RequestParam(value = "content") String content,
                                   @RequestParam(value = "category") String category,
+                                  @RequestParam(value = "located") String located,
                                   @RequestParam(value = "img") MultipartFile img) throws IOException {
 
         Member member = rq.getMember();
 
-        RsData<Article> createRs = this.articleService.create(category, member,title, content, img);
+        RsData<Article> createRs = this.articleService.create(category, member,title, content, img, located);
 
 //        if (createRs.isFail()) return (RsData) createRs;
 //        // 왜 되는거지?? 왜 안됐던거여

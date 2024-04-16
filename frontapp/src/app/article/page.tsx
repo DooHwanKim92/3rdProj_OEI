@@ -40,8 +40,8 @@ export default function Article() {
                                 </a>
                         </div>
                         <h3 className="mt-4 text-sm text-gray-700">작성자 : {article.author.username}</h3>
-                        <h3 className="mt-4 text-sm text-gray-700">{article.category}</h3>
-                        <p className="mt-1 text-lg font-medium text-gray-900">{article.title}</p>
+                        <h3 className="mt-4 text-sm text-gray-700">{article.location}</h3>
+                        <p className="mt-1 text-lg font-medium text-gray-900">[{article.category}] / {article.title}</p>
                         </div>
                 ))
             }

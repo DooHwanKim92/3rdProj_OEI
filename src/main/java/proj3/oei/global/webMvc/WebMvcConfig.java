@@ -18,7 +18,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("https://cdpn.io","http://localhost:3000")
+                .allowedOrigins("https://cdpn.io","http://localhost:3000", "https://dapi.kakao.com/")
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true);

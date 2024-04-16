@@ -35,7 +35,7 @@ public class ArticleService {
 
     @Transactional
     // 예외 발생 시 rollback 해준다
-    public RsData<Article> create(String category, Member member, String title, String content, MultipartFile img) throws IOException {
+    public RsData<Article> create(String category, Member member, String title, String content, MultipartFile img, String location) throws IOException {
 
         // 프로젝트 외부 저장
         // C://kingsman//file_upload//product
@@ -58,6 +58,7 @@ public class ArticleService {
                 .title(title)
                 .content(content)
                 .imgPath(thumnailPath)
+                .location(location)
                 .build();
 
         this.articleRepository.save(article);

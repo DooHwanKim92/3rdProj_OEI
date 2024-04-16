@@ -79,6 +79,7 @@ export default function CreateArticleForm() {
     formData.append("title", article.title);
     formData.append("content", article.content);
     formData.append("img", article.img);
+    formData.append("located", article.located);
 
     try {
       const response = await fetch("http://localhost:8090/api/v1/articles", {
@@ -108,31 +109,32 @@ export default function CreateArticleForm() {
     setArticle({ ...article, img: imageFile });
   };
 
-  // // 조회한 위,경도로 카카오 API 요청 보내서 주소 찾기
-  // const lat = location.coordinates.lat;
-  // const lon = location.coordinates.lng;
+  useEffect(() => {
+    // 위치 정보가 업데이트될 때마다 fetchLocation 함수를 호출
+    if (location.loaded) {
+        fetchLocation(location.coordinates.lat, location.coordinates.lng);
+    }
+}, [location]);
 
-  // useEffect(() => {
-  //   fetchLocation(lat,lon)
-  // }, [])
-
-  // const fetchLocation = (lat,lon) => {
-
-  //   fetch(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lon}&y=${lat}&input_coord=WGS84`, {
-  //     headers: {
-  //       'Authorization':'KakaoAK {INPUT_KAKAO_REST_API_KEY}}'
-  //     }
-  //   })
-  //       .then(row => row.json())
-  //       .then(row => setArticle(prevState => ({
-  //         ...prevState,
-  //         located: row.road_address.region_3depth_name
-  //     })))
-  // }
-
-  // // row.road_address.region_3depth_name
+  function fetchLocation(lat, lon) {
   
-
+    // 조회한 위,경도로 카카오 API 요청 보내서 주소 찾기
+    const KAKAO_API_KEY = process.env.NEXT_PUBLIC_KAKAO_API_KEY;
+  
+    fetch(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lon}&y=${lat}&input_coord=WGS84`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `KakaoAK ${KAKAO_API_KEY}`
+      }
+    })
+      .then(row => row.json())
+      .then(row => setArticle(prevState => ({
+        ...prevState,
+        located: row.documents[0].address.region_3depth_name
+      })));
+      // row.road_address.region_3depth_name
+  }
+  
   return (
     <div className="bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -180,13 +182,6 @@ export default function CreateArticleForm() {
           onChange={handleImageChange}
         />
         <br></br>
-        <div>위치
-          <div>
-          {location.loaded
-            ? JSON.stringify(location)
-            : "Location data not available yet."}
-          </div>
-        </div>
         <button
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
