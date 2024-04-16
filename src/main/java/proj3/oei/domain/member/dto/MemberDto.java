@@ -15,12 +15,18 @@ public class MemberDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private String email;
+    private String address;
+    private String nickname;
 
     public MemberDto(Member member) {
-        this.id = member.getId();
-        this.username = member.getUsername();
-        this.email = member.getEmail();
-        this.createdDate = member.getCreateDate();
-        this.modifiedDate = member.getModifiedDate();
+
+            this.id = member.getId();
+            this.username = member.getUsername();
+            this.email = member.getEmail();
+            this.address = member.getAddress();
+            this.createdDate = member.getCreateDate();
+            this.modifiedDate = member.getModifiedDate();
+            this.nickname = member.getNickname();
+
     }
 }

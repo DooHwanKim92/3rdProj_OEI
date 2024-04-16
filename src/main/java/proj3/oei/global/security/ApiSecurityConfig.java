@@ -24,12 +24,14 @@ public class ApiSecurityConfig {
                 .authorizeRequests(
                         authorizeRequests -> authorizeRequests
                                 .requestMatchers("/api/*/articles").permitAll()
+                                .requestMatchers("/api/*/categories").permitAll()
                                 // .requestMatchers(HttpMethod.GET,"/api/*/articles").permitAll()
                                 .requestMatchers("/api/*/articles/*").permitAll()
                                 // .requestMatchers(HttpMethod.POST,"/api/*/members/login").permitAll()
                                 .requestMatchers("/api/*/members/login").permitAll()
                                 .requestMatchers("/api/*/members/logout").permitAll()
                                 .requestMatchers("/api/*/members/signup").permitAll()
+                                .requestMatchers("/api/*/members/me").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .cors(

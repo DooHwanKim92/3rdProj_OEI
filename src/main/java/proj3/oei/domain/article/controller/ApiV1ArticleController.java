@@ -8,9 +8,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import proj3.oei.domain.article.entity.Article;
 import proj3.oei.domain.article.service.ArticleService;
 import proj3.oei.domain.member.entity.Member;
@@ -19,6 +21,7 @@ import proj3.oei.global.resultData.RsData;
 import proj3.oei.global.rq.Rq;
 import proj3.oei.global.security.SecurityUser;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +33,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/articles")
 public class ApiV1ArticleController {
+
+    @Value("${custom.fileDirPath}")
+    private String filePath;
 
     private final ArticleService articleService;
 
@@ -72,11 +78,13 @@ public class ApiV1ArticleController {
     // @Data = getter, setter 등 자주 사용하는 어노테이션 패키징
     // 매핑된 메서드에서 @RequestBody로 받은 Json객체를 담는 객체
     public static class CreateRequest {
+
+        private String category;
         @NotBlank
-        // @Valid
         private String title;
         @NotBlank
         private String content;
+
     }
 
     @Getter
@@ -88,19 +96,25 @@ public class ApiV1ArticleController {
     }
 
     @PostMapping("")
-    public RsData<CreateResponse> createArticle(@Valid @RequestBody CreateRequest createRequest) {
+    // RsData<CreateResponse>
+    // @RequestBody CreateRequest createRequest
+    public void createArticleTest(@Valid @RequestParam(value = "title") String title,
+                                  @RequestParam(value = "content") String content,
+                                  @RequestParam(value = "category") String category,
+                                  @RequestParam(value = "located") String located,
+                                  @RequestParam(value = "img") MultipartFile img) throws IOException {
 
         Member member = rq.getMember();
 
-        RsData<Article> createRs = this.articleService.create(member,createRequest.getTitle(), createRequest.getContent());
+        RsData<Article> createRs = this.articleService.create(category, member,title, content, img, located);
 
-        if (createRs.isFail()) return (RsData) createRs;
-
-        return RsData.of(
-                createRs.getResultCode(),
-                createRs.getMsg(),
-                new CreateResponse(createRs.getData())
-        );
+//        if (createRs.isFail()) return (RsData) createRs;
+//        // 왜 되는거지?? 왜 안됐던거여
+//        return RsData.of(
+//                createRs.getResultCode(),
+//                createRs.getMsg(),
+//                new CreateResponse(createRs.getData())
+//        );
     }
 
     @Data

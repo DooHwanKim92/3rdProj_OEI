@@ -21,4 +21,5 @@ spring:
       ddl-auto: create
     defer-datasource-initialization: true
 custom:
-  fileDirPath: /usr/file
+  fileDirPath: C:\oei\file_upload
+  basicImgPath : src/main/resources/static/기본이미지.jpg

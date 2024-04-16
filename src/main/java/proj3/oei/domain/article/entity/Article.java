@@ -23,6 +23,8 @@ public class Article extends BaseEntity {
     @ManyToOne
     private Member author;
 
+    private String category;
+
     @Column
     private String title;
 
@@ -32,5 +34,6 @@ public class Article extends BaseEntity {
     @Column
     private String location;
 
+    private String imgPath;
 
 }

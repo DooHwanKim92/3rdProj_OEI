@@ -1,8 +1,6 @@
 'use client'
 
-import { useCookies } from "react-cookie"
 import { Fragment, useState, useEffect } from 'react'
-import { NextResponse, type NextRequest } from "next/server";
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
   ArrowPathIcon,
@@ -17,11 +15,10 @@ import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/
 import { useParams, useRouter } from "next/navigation";
 
 const products = [
-  { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
-  { name: 'Engagement', description: 'Speak directly to your customers', href: '#', icon: CursorArrowRaysIcon },
-  { name: 'Security', description: 'Your customers’ data will be safe and secure', href: '#', icon: FingerPrintIcon },
-  { name: 'Integrations', description: 'Connect with third-party tools', href: '#', icon: SquaresPlusIcon },
-  { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#', icon: ArrowPathIcon },
+  { name: '모임', description: '가까운 동네 이웃과 친해져보세요 😊', href: '#', icon: ChartPieIcon },
+  { name: '아르바이트', description: '구인/구직은 여기서 한 번에 🏃‍♂️', href: '#', icon: CursorArrowRaysIcon },
+  { name: '부동산', description: '내가 살고 싶은 집이 모두 여기에 🏠', href: '#', icon: FingerPrintIcon },
+  { name: '프리토크', description: '자유롭게 이야기 해보세요 👂', href: '#', icon: SquaresPlusIcon },
 ]
 const callsToAction = [
   { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
@@ -34,14 +31,27 @@ function classNames(...classes) {
 
 export default function HeaderSection() {
 
-  const { nextUrl, cookies } = request;
-  const accessToken = cookies.get(ACCESS_TOKEN_KEY);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+useEffect(() => {
+  fetch('http://localhost:8090/api/v1/members/me', {
+            method: 'GET',
+            credentials: 'include', // ← 이걸 해줘야 서버에서 유저 조회가 됨
+        })
+      .then(result => result.json())
+      .then(result => {
+          if (result.resultCode.startsWith('S')) {
+            setIsLoggedIn(true);
+          }
+          if (result.resultCode.startsWith('F')) {
+            setIsLoggedIn(false);
+          }
+      })
+}, [isLoggedIn]); // 이펙트의 의존성 배열은 빈 배열로 설정하여 컴포넌트가 처음 렌더링될 때 한 번만 실행되도록 합니다.
 
   const router = useRouter();
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const handleLogout = async () => {
     const response = await fetch("http://localhost:8090/api/v1/members/logout", {
@@ -136,22 +146,32 @@ export default function HeaderSection() {
           <a href="/article" className="text-sm font-semibold leading-6 text-gray-900">
             중고거래
           </a>
+          <a href="/question" className="text-sm font-semibold leading-6 text-gray-900">
+            문의하기
+          </a>
           <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            메뉴1
+            채팅
           </a>
           <a href="/about" className="text-sm font-semibold leading-6 text-gray-900">
             나의정보
           </a>
+
         </Popover.Group>
+
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
-            로그인 <span aria-hidden="true">&rarr;</span>
-          </a>
-          <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
+          {isLoggedIn ? <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
             로그아웃 <span aria-hidden="true">&rarr;</span>
-          </button>
+          </button> : <a href="/login" className="text-sm font-semibold leading-6 text-gray-900">
+            로그인 <span aria-hidden="true">&rarr;</span>
+          </a>}
           
           
+          <div>
+            비상용버튼
+            <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
+              로그아웃 <span aria-hidden="true">&rarr;</span>
+            </button>
+          </div>
           
           
         </div>
@@ -231,6 +251,9 @@ export default function HeaderSection() {
                 >
                   로그인
                 </a>
+                <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
+                  로그아웃 <span aria-hidden="true">&rarr;</span>
+                </button>
               </div>
             </div>
           </div>
