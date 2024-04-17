@@ -98,10 +98,10 @@ public class ApiV1ArticleController {
     @PostMapping("")
     // RsData<CreateResponse>
     // @RequestBody CreateRequest createRequest
-    public void createArticleTest(@Valid @RequestParam(value = "title") String title,
-                                  @RequestParam(value = "content") String content,
-                                  @RequestParam(value = "category") String category,
-                                  @RequestParam(value = "located") String located,
+    public void createArticleTest(@Valid @NotBlank @RequestParam(value = "title") String title,
+                                  @NotBlank @RequestParam(value = "content") String content,
+                                  @NotBlank @RequestParam(value = "category") String category,
+                                  @NotBlank @RequestParam(value = "located") String located,
                                   @RequestParam(value = "img") MultipartFile img) throws IOException {
 
         Member member = rq.getMember();
