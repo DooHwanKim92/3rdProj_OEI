@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import proj3.oei.domain.member.entity.Member;
+import proj3.oei.domain.review.entity.Review;
 import proj3.oei.global.jpa.BaseEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,5 +37,8 @@ public class Article extends BaseEntity {
     private String location;
 
     private String imgPath;
+
+    @OneToMany(mappedBy = "article",cascade = CascadeType.REMOVE)
+    private List<Review> reviews;
 
 }

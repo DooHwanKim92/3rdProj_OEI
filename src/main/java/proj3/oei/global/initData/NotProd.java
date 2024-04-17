@@ -33,11 +33,13 @@ public class NotProd {
             Path directoryArticle = Paths.get("C:\\oei\\file_upload\\article");
             Path directoryReview = Paths.get("C:\\oei\\file_upload\\review");
             Path directoryQuestion = Paths.get("C:\\oei\\file_upload\\question");
+            Path directoryMember = Paths.get("C:\\oei\\file_upload\\member");
 
             try {
                 Files.createDirectories(directoryArticle);
                 Files.createDirectories(directoryReview);
                 Files.createDirectories(directoryQuestion);
+                Files.createDirectories(directoryMember);
             } catch (FileAlreadyExistsException e) {
                 System.out.println("디렉토리가 이미 존재합니다");
             } catch (NoSuchFileException e) {

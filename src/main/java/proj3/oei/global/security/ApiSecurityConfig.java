@@ -32,6 +32,7 @@ public class ApiSecurityConfig {
                                 .requestMatchers("/api/*/members/logout").permitAll()
                                 .requestMatchers("/api/*/members/signup").permitAll()
                                 .requestMatchers("/api/*/members/me").permitAll()
+                                .requestMatchers("/api/*/reviews/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .cors(

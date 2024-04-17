@@ -38,10 +38,24 @@ export default function SignUp() {
     });
   }
 
+  const [imageSrc, setImageSrc] = useState('');
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setMember({ ...member, [name]: value });
   }
+
+  const encodeFileToBase64 = (fileBlob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(fileBlob);
+
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setImageSrc(reader.result);
+        resolve();
+      };
+    });
+  };
 
 
   return (
@@ -56,8 +70,17 @@ export default function SignUp() {
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
-            <div className="sm:col-span-full">
+              <div className="sm:col-span-full">
+                <div>
+                  <h2>프로필사진</h2>
+                  <input type="file" onChange={(e) => {
+                    encodeFileToBase64(e.target.files[0]);
+                  }} />
+                  <div className="h-20 w-20">
+                    {imageSrc && <img src={imageSrc} alt="preview-img" />}
+                  </div>
+                </div>
+              
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 아이디
               </label>

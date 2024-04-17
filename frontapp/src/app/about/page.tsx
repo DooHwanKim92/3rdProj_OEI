@@ -10,6 +10,7 @@ export default function About() {
 
     const router = useRouter();
 
+    // 로그인 안했으면 /login 페이지로 리다이렉팅
     useEffect(() => {
         fetch('http://localhost:8090/api/v1/members/me', {
             method: 'GET',
@@ -22,13 +23,14 @@ export default function About() {
                 }
                 if (result.resultCode.startsWith('F')) {
                     router.push("/login")
-                }      
+                }
             });
     }, [])
 
     return (
 
-      <div className = "bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56" > <h5>소개 페이지</h5>
+      <div className = "bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56" > 
+        <h5>소개 페이지</h5>
         <div>
             <div className="px-4 sm:px-0">
                 <h3 className="text-base font-semibold leading-7 text-gray-900">프로필</h3>
