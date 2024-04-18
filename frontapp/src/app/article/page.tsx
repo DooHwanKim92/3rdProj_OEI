@@ -52,11 +52,10 @@ export default function Article() {
                                 className="h-full w-full object-cover object-center group-hover:opacity-75"/>
                                 </a>
                         </div>
-                        <h3 className="mt-4 text-sm text-gray-700">작성자 : {article.author.nickname}</h3>
-                        <h3 className="mt-4 text-sm text-gray-700">동네 : {article.location}</h3>
-                        <p className="mt-1 text-lg font-medium text-gray-900">[{article.category}] {article.title}
-                        </p>
+                        <p className="mt-1 text-lg font-medium text-gray-900">[{article.category}] {article.title}</p>
                         <p className="text-blue-600">({article.reviews.length})</p>
+                        <h3 className="mt-4 text-sm text-gray-700">작성자 : <a className="text-blue-600" href={`/profile/${article.author.id}`}>{article.author.nickname}</a></h3>
+                        <h3 className="mt-4 text-sm text-gray-700">동네 : {article.location}</h3>
                         </div>
                 ))
             }

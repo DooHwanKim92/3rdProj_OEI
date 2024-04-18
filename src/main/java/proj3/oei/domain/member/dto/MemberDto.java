@@ -17,6 +17,7 @@ public class MemberDto {
     private String email;
     private String address;
     private String nickname;
+    private String profileImg;
 
     public MemberDto(Member member) {
 
@@ -27,6 +28,7 @@ public class MemberDto {
             this.createdDate = member.getCreateDate();
             this.modifiedDate = member.getModifiedDate();
             this.nickname = member.getNickname();
+            this.profileImg = member.getProfileImg();
 
     }
 }

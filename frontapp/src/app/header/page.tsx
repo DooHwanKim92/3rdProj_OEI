@@ -152,7 +152,7 @@ useEffect(() => {
           <a href="/chat" className="text-sm font-semibold leading-6 text-gray-900">
             채팅
           </a>
-          <a href="/about" className="text-sm font-semibold leading-6 text-gray-900">
+          <a href="/profile" className="text-sm font-semibold leading-6 text-gray-900">
             나의정보
           </a>
 

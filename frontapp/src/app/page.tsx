@@ -1,6 +1,27 @@
 'use client'
+import {useEffect} from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+
+  const router = useRouter();
+
+  // 로그인했으면 /article 페이지로 바로 이동
+  const onClick = () => {
+    fetch('http://localhost:8090/api/v1/members/me', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then(result => result.json())
+      .then(result => {
+        if (result.resultCode.startsWith('S')) {
+          router.push("/article");
+        }
+        if (result.resultCode.startsWith('F')) {
+          router.push("/login");
+        }
+      });
+  };
 
   return (
     <div className="bg-white">
@@ -16,12 +37,12 @@ export default function Home() {
             동네라서 가능한 모든 것 오이에서 가까운 이웃과 함께해요.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                href="/login"
+              <button
+                onClick={onClick}
                 className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 시작하기
-              </a>
+              </button>
             </div>
           </div>
         </div>

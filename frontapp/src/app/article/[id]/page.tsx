@@ -12,13 +12,23 @@ export default function ArticleDetail() {
 
     const router = useRouter();
 
-    const [clicked, setClicked] = useState(true)
-
     const [article, setArticle] = useState({})
 
     const [reviews, setReviews] = useState([])
 
+    const [member, setMember] = useState({})
     const [author, setAuthor] = useState([])
+
+    const fetchMember = () => {
+      fetch("http://localhost:8090/api/v1/members/me",{
+          method: 'GET',
+          credentials: 'include', // 핵심 변경점
+            })
+            .then(row => row.json())
+            .then(row => {
+                         setMember(row.data.memberDto)
+                              })
+    }
 
     const fetchArticle = () => {
         fetch(`http://localhost:8090/api/v1/articles/${params.id}`)
@@ -55,12 +65,9 @@ export default function ArticleDetail() {
 
     useEffect(() => {
         fetchArticle()
-        modifyArticle()
+        fetchMember()
     }, [])
 
-    const modifyArticle = () => {
-        (clicked ? setClicked(false) : setClicked(true))
-    }
 
     // 댓글 등록 함수
     const [review, setReview] = useState({content: ''})
@@ -100,14 +107,19 @@ export default function ArticleDetail() {
     return (
         <>
         <div className = "bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56" > 
-            Article Detail{params.id} Page
             <div>
-                {article.id} / {article.title} / {article.content}
-                <button onClick={modifyArticle}>수정</button>
-                <button onClick={deleteArticle}>삭제</button>
-                    <div>
-                        {clicked ? <ArticleModify fetchArticle={fetchArticle}/> : null}
-                    </div>
+              <h1>[{article.category}] / {article.title}</h1>
+              <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={author.profileImg} alt="" />
+              <span>작성자 : <a className="text-blue-600" href={`/profile/${author.id}`}>{author.nickname}</a></span>
+                {member.id === author.id ? 
+                <div>
+                <a href={`/article/modify/${article.id}`}
+                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >수정</a>
+                <button onClick={deleteArticle}
+                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >삭제</button>
+                    </div> : <div></div>}
             </div>
             <div>
       <div className="mt-6 border-t border-gray-100">
@@ -119,14 +131,6 @@ export default function ArticleDetail() {
                                 alt={article.imgPath}
                                 className="h-full w-full object-cover object-center"/>
             </dt>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">게시글 제목</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{article.title}</dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">작성자</dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{author.nickname}</dd>
           </div>
           <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
             <dt className="text-sm font-medium leading-6 text-gray-900">가격? 뭐 추가정보 이런거</dt>
@@ -168,10 +172,10 @@ export default function ArticleDetail() {
       {reviews.map((review) => (
         <li key={review.id} className="flex justify-between gap-x-6 py-5">
           <div className="flex min-w-0 gap-x-4">
-            <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={review.author.nickname} alt="" />
+            <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={review.author.profileImg} alt="" />
             <div className="min-w-0 flex-auto">
               <p className="text-sm font-semibold leading-6 text-gray-900">{review.content}</p>
-              <p className="mt-1 truncate text-xs leading-5 text-gray-500">{review.author.username}</p>
+              <p className="mt-1 truncate text-xs leading-5 text-gray-500"><a className="text-blue-600" href={`/profile/${review.author.id}`}>{review.author.nickname}</a></p>
             </div>
           </div>
           <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
@@ -185,52 +189,4 @@ export default function ArticleDetail() {
     </div>
         </>
     );
-}
-
-// 게시글 수정
-function ArticleModify ({fetchArticle}) {
-
-    const params = useParams();
-
-    const [article, setArticle] = useState({title: '', content: ''})
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        // 기존 button의 submit 기능을 막고 아래 함수를 실행시킨다.
-
-        const response = await fetch(`http://localhost:8090/api/v1/articles/${params.id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(article)
-        });
-
-        if (response.ok) {
-            alert('게시물 수정 완료.');
-            fetchArticle()
-        } else {
-            alert('게시물 수정 실패.');
-        }
-
-    }
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setArticle({ ...article, [name]: value });
-        console.log({ ...article, [name]: value })
-    }
-
-
-    return (
-        <>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="title" value={article.title} onChange={handleChange} />
-                <input type="text" name="content" value={article.content} onChange={handleChange}/>
-                <button type="submit">수정</button>
-            </form>
-            
-        </>
-        
-    )
 }

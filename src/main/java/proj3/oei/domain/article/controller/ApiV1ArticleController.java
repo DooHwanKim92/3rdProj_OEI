@@ -56,8 +56,9 @@ public class ApiV1ArticleController {
     }
 
     @GetMapping("")
-    public RsData<ArticlesResponse> getArticles() {
-        List<Article> articles = this.articleService.findAll();
+    // 중고거래 게시글 목록
+    public RsData<ArticlesResponse> getTradeArticles() {
+        List<Article> articles = this.articleService.getTradeArticles();
         return RsData.of("S-1", "성공", new ArticlesResponse(articles));
     }
 
@@ -98,15 +99,17 @@ public class ApiV1ArticleController {
     @PostMapping("")
     // RsData<CreateResponse>
     // @RequestBody CreateRequest createRequest
-    public void createArticleTest(@Valid @NotBlank @RequestParam(value = "title") String title,
+    public void createArticle(@Valid @NotBlank @RequestParam(value = "title") String title,
                                   @NotBlank @RequestParam(value = "content") String content,
                                   @NotBlank @RequestParam(value = "category") String category,
                                   @NotBlank @RequestParam(value = "located") String located,
+                                  @NotBlank @RequestParam(value = "lat") String lat,
+                                  @NotBlank @RequestParam(value = "lon") String lon,
                                   @RequestParam(value = "img") MultipartFile img) throws IOException {
 
         Member member = rq.getMember();
 
-        RsData<Article> createRs = this.articleService.create(category, member,title, content, img, located);
+        RsData<Article> createRs = this.articleService.createTradeArticle("trade",category, member,title, content, img, located, lat, lon);
 
 //        if (createRs.isFail()) return (RsData) createRs;
 //        // 왜 되는거지?? 왜 안됐던거여
@@ -132,25 +135,29 @@ public class ApiV1ArticleController {
     }
 
     @PatchMapping("/{id}")
-    public RsData<ModifyResponse> modifyArticle(@PathVariable(value = "id") Long id, @Valid @RequestBody ModifyRequest modifyRequest) {
+    public void modifyArticle(@PathVariable(value = "id") Long id, @Valid @NotBlank @RequestParam(value = "title") String title,
+                                  @NotBlank @RequestParam(value = "content") String content,
+                                  @NotBlank @RequestParam(value = "category") String category,
+                                  @NotBlank @RequestParam(value = "located") String located,
+                                  @RequestParam(value = "img") MultipartFile img) throws IOException {
+
+        Member member = rq.getMember();
 
         // 게시글 수정 권한 검증 로직 필요
 
         Optional<Article> article = this.articleService.findById(id);
+
         if (article.isEmpty()) {
-            return RsData.of(
-                    "F-1",
-                    "%d번 게시글은 존재하지 않습니다.".formatted(id)
-            );
+            article = null;
         }
 
-        this.articleService.modify(article.get(), modifyRequest.getTitle(), modifyRequest.getContent());
+        this.articleService.modify(article.get(), category, title, content, img, located);
 
-        return RsData.of(
-                "S-1",
-                "%d 번 게시글 수정 성공".formatted(article.get().getId()),
-                new ModifyResponse(article.get())
-        );
+//        return RsData.of(
+//                "S-1",
+//                "%d 번 게시글 수정 성공".formatted(article.get().getId()),
+//                new ModifyResponse(article.get())
+//        );
     }
 
     @DeleteMapping("/{id}")

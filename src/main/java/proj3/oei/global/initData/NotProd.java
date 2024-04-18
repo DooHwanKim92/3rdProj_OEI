@@ -20,9 +20,6 @@ public class NotProd {
     CommandLineRunner initData(ArticleService articleService, MemberService memberService, CategoryService categoryService, PasswordEncoder passwordEncoder) {
 
         return args -> {
-            Member user1 = memberService.join("user1", "1234", "test1@test.com","address1","닉네임1");
-            Member user2 = memberService.join("user2", "1234", "test2@test.com","address2","닉네임2");
-            Member admin  = memberService.join("admin", "1234", "admin@test.com","address3","닉네임3");
 
             categoryService.create("판매");
             categoryService.create("구매");
