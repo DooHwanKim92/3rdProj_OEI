@@ -20,7 +20,7 @@ public class NotProd {
     CommandLineRunner initData(ArticleService articleService, MemberService memberService, CategoryService categoryService, PasswordEncoder passwordEncoder) {
 
         return args -> {
-
+            // 한 번만 실행시켜
             categoryService.create("판매");
             categoryService.create("구매");
             categoryService.create("대여");

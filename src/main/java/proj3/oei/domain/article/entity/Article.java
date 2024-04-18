@@ -52,6 +52,8 @@ public class Article extends BaseEntity {
 
     private String imgPath;
 
+    private Long hit;
+
     @OneToMany(mappedBy = "article",cascade = CascadeType.REMOVE)
     private List<Review> reviews;
 

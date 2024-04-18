@@ -66,6 +66,7 @@ public class ArticleService {
                     .type(type)
                     .lat(Double.parseDouble(lat))
                     .lon(Double.parseDouble(lon))
+                    .hit(0L)
                     .build();
 
             this.articleRepository.save(article);
@@ -110,5 +111,13 @@ public class ArticleService {
     public void remove(Article article) {
         this.articleRepository.delete(article);
         // JPA 메서드 articleRepository.deleteById(id); 도 있음
+    }
+
+    public void addHit(Article article) {
+        Article addHit = article.toBuilder()
+                .hit(article.getHit() + 1)
+                .build();
+
+        this.articleRepository.save(addHit);
     }
 }

@@ -3,6 +3,24 @@ import Link from "next/link"
 import {useEffect, useState} from "react"
 
 export default function Article() {
+    
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        fetch('http://localhost:8090/api/v1/members/me', {
+            method: 'GET',
+            credentials: 'include', // ← 이걸 해줘야 서버에서 유저 조회가 됨
+        })
+            .then(result => result.json())
+            .then(result => {
+                if (result.resultCode.startsWith('S')) {
+                    setIsLoggedIn(true);
+                }
+                if (result.resultCode.startsWith('F')) {
+                    setIsLoggedIn(false);
+                }
+        })
+    }, [isLoggedIn]); // 이펙트의 의존성 배열은 빈 배열로 설정하여 컴포넌트가 처음 렌더링될 때 한 번만 실행되도록 합니다.
 
     const [articles, setArticles] = useState([])
 
@@ -25,10 +43,11 @@ export default function Article() {
                     <p className="mt-2 text-lg leading-8 text-gray-600">
                         사고, 팔고, 빌릴 수도 있어요
                     </p>
-                    <a
+                    {isLoggedIn ? <a
           href="/article/create "
           className = "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"> 
-          게시글 작성하기 </a>
+          게시글 작성하기 </a> : null}
+                    
                 </div>
             </div>
         </div>
@@ -53,7 +72,8 @@ export default function Article() {
                                 </a>
                         </div>
                         <p className="mt-1 text-lg font-medium text-gray-900">[{article.category}] {article.title}</p>
-                        <p className="text-blue-600">({article.reviews.length})</p>
+                        조회수 : {article.hit}
+                        <p className="text-blue-600">(댓글 : {article.reviews.length})</p>
                         <h3 className="mt-4 text-sm text-gray-700">작성자 : <a className="text-blue-600" href={`/profile/${article.author.id}`}>{article.author.nickname}</a></h3>
                         <h3 className="mt-4 text-sm text-gray-700">동네 : {article.location}</h3>
                         </div>

@@ -26,8 +26,10 @@ export default function ArticleDetail() {
             })
             .then(row => row.json())
             .then(row => {
-                         setMember(row.data.memberDto)
-                              })
+              if (row.resultCode.startsWith('S')) {
+                setMember(row.data.memberDto)
+              }          
+                          })
     }
 
     const fetchArticle = () => {
@@ -109,6 +111,7 @@ export default function ArticleDetail() {
         <div className = "bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56" > 
             <div>
               <h1>[{article.category}] / {article.title}</h1>
+              <h5>[조회수] / {article.hit}</h5>
               <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={author.profileImg} alt="" />
               <span>작성자 : <a className="text-blue-600" href={`/profile/${author.id}`}>{author.nickname}</a></span>
                 {member.id === author.id ? 
@@ -145,7 +148,7 @@ export default function ArticleDetail() {
           <div className="col-span-full">
           <form onSubmit={handleSubmit}>
               <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                댓글
+                댓글 {reviews.length} 개
               </label>
               <div className="mt-2">
               

@@ -64,15 +64,19 @@ public class ApiV1ArticleController {
 
     @GetMapping("/{id}")
     public RsData<ArticleResponse> getArticle(@PathVariable(value = "id") Long id) {
-        return articleService.findById(id)
-                .map(article -> RsData.of(
+        Optional<Article> article = this.articleService.findById(id);
+        if(article.isEmpty()) {
+            return RsData.of(
+                    "F-1",
+                    "존재하지 않는 게시글"
+            );
+        }
+        this.articleService.addHit(article.get());
+        return  RsData.of(
                         "S-1",
                         "성공",
-                        new ArticleResponse(article)
-                )).orElseGet(() -> RsData.of(
-                        "F-1",
-                        "%d번 게시글은 존재하지 않습니다.".formatted(id)
-                ));
+                        new ArticleResponse(article.get())
+                );
     }
 
     @Data
