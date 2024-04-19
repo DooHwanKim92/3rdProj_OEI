@@ -42,6 +42,8 @@ public class Member extends BaseEntity{
 
     private String address;
 
+    private String profileImg;
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("MEMBER"));

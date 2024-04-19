@@ -2,43 +2,41 @@
 
 import {useEffect, useState} from "react";
 import {PaperClipIcon} from '@heroicons/react/20/solid'
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export default function About() {
 
     const [member, setMember] = useState({});
 
+    const params = useParams();
+    // @PathVariable 같은 놈임
+
     const router = useRouter();
 
+    // 로그인 안했으면 /login 페이지로 리다이렉팅
+    const fetchMember = () => {
+        fetch(`http://localhost:8090/api/v1/members/${params.id}`)
+                                .then(row => row.json())
+                                .then(row => {
+                                    setMember(row.data.memberDto)
+                                })
+    }
+
     useEffect(() => {
-        fetch('http://localhost:8090/api/v1/members/me', {
-            method: 'GET',
-            credentials: 'include', // 핵심 변경점
-        })
-            .then(result => result.json())
-            .then(result => {
-                if (result.resultCode.startsWith('S')) {
-                    setMember(result.data.memberDto);
-                }
-                if (result.resultCode.startsWith('F')) {
-                    router.push("/login")
-                }      
-            });
+        fetchMember()
     }, [])
 
     return (
 
-      <div className = "bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56" > <h5>소개 페이지</h5>
+      <div className = "bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56" > 
+        <h5>소개 페이지</h5>
         <div>
             <div className="px-4 sm:px-0">
                 <h3 className="text-base font-semibold leading-7 text-gray-900">프로필</h3>
+                <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={member.profileImg} alt="" />
             </div>
             <div className="mt-6 border-t border-gray-100">
                 <dl className="divide-y divide-gray-100">
-                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt className="text-sm font-medium leading-6 text-gray-900">아이디</dt>
-                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{member.username}</dd>
-                    </div>
                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt className="text-sm font-medium leading-6 text-gray-900">이메일</dt>
                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{member.email}</dd>

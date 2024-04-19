@@ -1,18 +1,18 @@
 'use client'
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 // 위,경도 위치 조회
 interface locationType {
   loaded: boolean;
-  coordinates?: { lat: number; lon: number };
+  coordinates?: { lat: number; lng: number };
   error?: { code: number; message: string };
 }
 
 const useGeolocation = () => {
   const [location, setLocation] = useState<locationType>({
     loaded: false,
-    coordinates: { lat: 0, lon: 0, }
+    coordinates: { lat: 0, lng: 0, }
   })
 
   // 성공에 대한 로직
@@ -21,7 +21,7 @@ const useGeolocation = () => {
       loaded: true,
       coordinates: {
         lat: location.coords.latitude, // 위도
-        lon: location.coords.longitude, // 경도
+        lng: location.coords.longitude, // 경도
       }
     })
   }
@@ -54,15 +54,27 @@ const useGeolocation = () => {
 
 // 게시글 등록
 export default function CreateArticleForm() {
+  const params = useParams();
   const [categories, setCategory] = useState([]);
-  const [article, setArticle] = useState({ category: "", title: "", content: "", img: null ,located:"",lat:"" ,lon:""});
+  const [article, setArticle] = useState({ category: "", title: "", content: "", img: null ,located:""});
   const router = useRouter();
   // 위치 조회 함수 호출
   const location = useGeolocation();
 
   useEffect(() => {
     fetchCategories();
+    fetchArticle()
   }, []);
+
+  const fetchArticle = () => {
+    fetch(`http://localhost:8090/api/v1/articles/${params.id}`)
+                            .then(row => row.json())
+                            .then(row => {
+                                setArticle(row.data.article)
+                            })
+    // 해당 URL로 응답받은 data를 json객체에 담는다. (백엔드 통신)
+    // json객체에 담은 data를 다시 article에 set 한다.
+}
 
   const fetchCategories = () => {
     fetch("http://localhost:8090/api/v1/categories")
@@ -80,24 +92,22 @@ export default function CreateArticleForm() {
     formData.append("content", article.content);
     formData.append("img", article.img);
     formData.append("located", article.located);
-    formData.append("lat", article.lat);
-    formData.append("lon", article.lon);
 
     try {
-      const response = await fetch("http://localhost:8090/api/v1/articles", {
-        method: "POST",
+      const response = await fetch(`http://localhost:8090/api/v1/articles/${params.id}`, {
+        method: "PATCH",
         credentials: "include",
         body: formData,
       });
 
       if (response.ok) {
-        alert("게시물이 성공적으로 등록되었습니다.");
+        alert("게시물 수정 성공.");
         router.push("/article");
       } else {
-        alert("게시물 등록에 실패했습니다.");
+        alert("게시물 수정 실패.");
       }
     } catch (error) {
-      console.error("게시물 등록 에러:", error);
+      console.error("게시물 수정 에러:", error);
     }
   };
 
@@ -114,8 +124,7 @@ export default function CreateArticleForm() {
   useEffect(() => {
     // 위치 정보가 업데이트될 때마다 fetchLocation 함수를 호출
     if (location.loaded) {
-        fetchLocation(location.coordinates.lat, location.coordinates.lon);
-        setArticle({...article, lat:location.coordinates.lat, lon:location.coordinates.lon})
+        fetchLocation(location.coordinates.lat, location.coordinates.lng);
     }
 }, [location]);
 
@@ -142,7 +151,7 @@ export default function CreateArticleForm() {
     <div className="bg-white mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          게시글 작성하기
+          게시글 수정하기
         </h2>
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -189,7 +198,7 @@ export default function CreateArticleForm() {
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          등록
+          수정
         </button>
       </form>
       <div>

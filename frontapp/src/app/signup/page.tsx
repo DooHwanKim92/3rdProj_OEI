@@ -13,35 +13,64 @@ export default function SignUp() {
 
   const router = useRouter();
 
-  const [member, setMember] = useState({username: '', password1: '', password2 :'', email:'', address:'', nickname:''})
+  const [member, setMember] = useState({username: '', password1: '', password2 :'', email:'', address:'', nickname:'', profileImg : null})
 
   const [error, setError] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:8090/api/v1/members/signup", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(member)
-    }).then(row => row.json())
-      .then(row => {setError(row.resultCode)
+    const formData = new FormData();
+    formData.append("username", member.username);
+    formData.append("password1", member.password1);
+    formData.append("password2", member.password2);
+    formData.append("email", member.email);
+    formData.append("address", member.address);
+    formData.append("nickname", member.nickname);
+    formData.append("profileImg", member.profileImg);
 
-        if (row.resultCode.startsWith('S')) {
-          alert('회원가입 성공');
-          router.push("/")
-        } else {
-          alert(row.msg);
-        }
-    });
+    try {
+      const response = await fetch("http://localhost:8090/api/v1/members/signup", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("회원가입 성공.");
+        router.push("/");
+      } else {
+        alert("회원가입 실패.");
+      }
+    } catch (error) {
+      console.error("회원가입 에러:", error);
+    }
   }
+
+  const [imageSrc, setImageSrc] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setMember({ ...member, [name]: value });
   }
+
+  const handleImageChange = (e) => {
+    const imageFile = e.target.files[0];
+    setMember({ ...member, profileImg: imageFile });
+    encodeFileToBase64;
+  };
+
+  const encodeFileToBase64 = (fileBlob) => {
+
+    const reader = new FileReader();
+    reader.readAsDataURL(fileBlob);
+
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setImageSrc(reader.result);
+        resolve();
+      };
+    });
+  };
 
 
   return (
@@ -52,12 +81,22 @@ export default function SignUp() {
         </h2>
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-
-            <div className="sm:col-span-full">
+              <div className="sm:col-span-full">
+                <div>
+                  <h2>프로필사진</h2>
+                  <input type="file" 
+                  name="profileImg"
+                  accept="image/*"
+                  onChange={handleImageChange}/>
+                  <div className="h-20 w-20">
+                    {imageSrc && <img src={imageSrc} alt="preview-img" />}
+                  </div>
+                </div>
+              
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 아이디
               </label>
@@ -71,8 +110,6 @@ export default function SignUp() {
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
-              {/* <button type="button" className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
-                중복확인</button> */}
             </div>
 
             <div className="sm:col-span-full">
@@ -104,8 +141,6 @@ export default function SignUp() {
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
-              {/* <button type="button" className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
-                중복확인</button> */}
             </div>
 
             <div className="sm:col-span-full">
@@ -155,88 +190,6 @@ export default function SignUp() {
                 />
               </div>
             </div>
-
-            {/* <div className="col-span-full">
-              <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
-                Photo
-              </label>
-              <div className="mt-2 flex items-center gap-x-3">
-                <UserCircleIcon className="h-12 w-12 text-gray-300" aria-hidden="true" />
-                <button
-                  type="button"
-                  className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                >
-                  Change
-                </button>
-              </div>
-            </div>
-
-            <div className="col-span-full">
-              <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                Cover photo
-              </label>
-              <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                <div className="text-center">
-                  <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                    <label
-                      htmlFor="file-upload"
-                      className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                    >
-                      <span>Upload a file</span>
-                      <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="sm:col-span-2 sm:col-start-1">
-              <label htmlFor="city" className="block text-sm font-medium leading-6 text-gray-900">
-                City
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  name="city"
-                  id="city"
-                  autoComplete="address-level2"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-2">
-              <label htmlFor="region" className="block text-sm font-medium leading-6 text-gray-900">
-                State / Province
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  name="region"
-                  id="region"
-                  autoComplete="address-level1"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-2">
-              <label htmlFor="postal-code" className="block text-sm font-medium leading-6 text-gray-900">
-                ZIP / Postal code
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  name="postal-code"
-                  id="postal-code"
-                  autoComplete="postal-code"
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div> */}
           </div>
         </div>
       </div>

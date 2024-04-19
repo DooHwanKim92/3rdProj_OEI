@@ -15,10 +15,10 @@ import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/
 import { useParams, useRouter } from "next/navigation";
 
 const products = [
-  { name: '모임', description: '가까운 동네 이웃과 친해져보세요 😊', href: '#', icon: ChartPieIcon },
-  { name: '아르바이트', description: '구인/구직은 여기서 한 번에 🏃‍♂️', href: '#', icon: CursorArrowRaysIcon },
-  { name: '부동산', description: '내가 살고 싶은 집이 모두 여기에 🏠', href: '#', icon: FingerPrintIcon },
-  { name: '프리토크', description: '자유롭게 이야기 해보세요 👂', href: '#', icon: SquaresPlusIcon },
+  { name: '모임', description: '가까운 동네 이웃과 친해져보세요 😊', href: '/mytown/club', icon: ChartPieIcon },
+  { name: '아르바이트', description: '구인/구직은 여기서 한 번에 🏃‍♂️', href: '/mytown/alba', icon: CursorArrowRaysIcon },
+  { name: '부동산', description: '내가 살고 싶은 집이 모두 여기에 🏠', href: '/mytown/property', icon: FingerPrintIcon },
+  { name: '프리토크', description: '자유롭게 이야기 해보세요 👂', href: '/mytown/freetalk', icon: SquaresPlusIcon },
 ]
 const callsToAction = [
   { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
@@ -80,7 +80,9 @@ useEffect(() => {
             <span className="sr-only">Your Company</span>
             <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
           </a>
+          OEI  
         </div>
+        
         <div className="flex lg:hidden">
           <button
             type="button"
@@ -149,10 +151,10 @@ useEffect(() => {
           <a href="/question" className="text-sm font-semibold leading-6 text-gray-900">
             문의하기
           </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+          <a href="/chat" className="text-sm font-semibold leading-6 text-gray-900">
             채팅
           </a>
-          <a href="/about" className="text-sm font-semibold leading-6 text-gray-900">
+          <a href="/profile" className="text-sm font-semibold leading-6 text-gray-900">
             나의정보
           </a>
 
@@ -166,12 +168,12 @@ useEffect(() => {
           </a>}
           
           
-          <div>
+          {/* <div>
             비상용버튼
             <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
               로그아웃 <span aria-hidden="true">&rarr;</span>
             </button>
-          </div>
+          </div> */}
           
           
         </div>
@@ -254,6 +256,7 @@ useEffect(() => {
                 <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
                   로그아웃 <span aria-hidden="true">&rarr;</span>
                 </button>
+                
               </div>
             </div>
           </div>

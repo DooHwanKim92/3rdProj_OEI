@@ -5,9 +5,11 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import proj3.oei.domain.member.entity.Member;
 import proj3.oei.domain.member.repository.MemberRepository;
 import proj3.oei.global.exception.GlobalException;
@@ -15,11 +17,16 @@ import proj3.oei.global.jwt.JwtProvider;
 import proj3.oei.global.resultData.RsData;
 import proj3.oei.global.security.SecurityUser;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+
+    @Value("${custom.fileDirPath}")
+    private String fileDirPath;
 
     private final MemberRepository memberRepository;
 
@@ -27,13 +34,26 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public Member join(String username, String password, String email, String address, String nickname) {
+    public Member join(String username, String password, String email, String address, String nickname, MultipartFile img) throws IOException {
+        String thumnailPath = "";
+        String thunmail = "";
+
+        if (img.isEmpty()) {
+            thumnailPath = "/기본이미지.jpg";
+        } else if (!img.isEmpty()) {
+            thunmail = "member/" + UUID.randomUUID().toString() + ".jpg";
+            File representImgFile = new File(fileDirPath + "/" + thunmail);
+            img.transferTo(representImgFile);
+            thumnailPath = "http://localhost:8090/file/" + thunmail;
+        }   // 프론트(localhost:3000)랑 주소가 달라서 백엔드 주소를 경로에 함께 입력해줘야됨
+
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .email(email)
                 .address(address)
                 .nickname(nickname)
+                .profileImg(thumnailPath)
                 .build();
 
         String refreshToken = jwtProvider.genRefreshToken(member);

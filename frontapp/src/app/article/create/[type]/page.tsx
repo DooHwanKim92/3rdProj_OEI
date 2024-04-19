@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 // 위,경도 위치 조회
 interface locationType {
@@ -51,25 +51,38 @@ const useGeolocation = () => {
 // 위,경도 위치 조회 끝
 
 
-
 // 게시글 등록
-export default function CreateArticleForm() {
-  const [categories, setCategory] = useState([]);
+export default function TypeArticeForm() {
+
   const [article, setArticle] = useState({ category: "", title: "", content: "", img: null ,located:"",lat:"" ,lon:""});
   const router = useRouter();
   // 위치 조회 함수 호출
   const location = useGeolocation();
+  const params = useParams();
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  let categories = [];
 
-  const fetchCategories = () => {
-    fetch("http://localhost:8090/api/v1/categories")
-      .then((response) => response.json())
-      .then((data) => setCategory(data.data.categories))
-      .catch((error) => console.error("카테고리 로드 에러:", error));
-  };
+  if(params.type === 'trade') {
+    categories = [
+      {id : 1,name : '판매',},{id : 2,name : '구매',},{id : 3,name : '대여',},{id : 4,name : '무료나눔',}
+    ]
+  } else if (params.type === 'club') {
+    categories = [
+      {id : 1,name : '홍보',},{id : 2,name : '활동',},{id : 3,name : '문의',}
+    ]
+  } else if (params.type === 'alba') {
+    categories = [
+      {id : 1,name : '구인',},{id : 2,name : '구직',},{id : 3,name : '대타',}
+    ]
+  } else if (params.type === 'freetalk') {
+    categories = [
+      {id : 1,name : '정보공유',},{id : 2,name : '찾습니다',},{id : 3,name : '수다',}
+    ]
+  } else if (params.type === 'property') {
+    categories = [
+      {id : 1,name : '월세',},{id : 2,name : '전세/반전세',},{id : 3,name : '매매',}
+    ]
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -84,16 +97,29 @@ export default function CreateArticleForm() {
     formData.append("lon", article.lon);
 
     try {
-      const response = await fetch("http://localhost:8090/api/v1/articles", {
+      const response = await fetch(`http://localhost:8090/api/v1/articles/${params.type}`, {
         method: "POST",
         credentials: "include",
         body: formData,
       });
 
-      if (response.ok) {
+      if (response.ok && params.type === 'trade') {
         alert("게시물이 성공적으로 등록되었습니다.");
         router.push("/article");
-      } else {
+      } else if (response.ok && params.type === 'club') {
+        alert("게시물이 성공적으로 등록되었습니다.");
+        router.push("/mytown/club");
+      } else if (response.ok && params.type === 'property') {
+        alert("게시물이 성공적으로 등록되었습니다.");
+        router.push("/mytown/property");
+      } else if (response.ok && params.type === 'alba') {
+        alert("게시물이 성공적으로 등록되었습니다.");
+        router.push("/mytown/alba");
+      } else if (response.ok && params.type === 'freetalk') {
+        alert("게시물이 성공적으로 등록되었습니다.");
+        router.push("/mytown/freetalk");
+      }
+      else {
         alert("게시물 등록에 실패했습니다.");
       }
     } catch (error) {
