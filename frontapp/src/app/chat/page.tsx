@@ -1,3 +1,6 @@
+'use client'
+import { useEffect, useState } from "react"
+
 const people = [
     {
       name: 'Leslie Alexander',
@@ -54,6 +57,23 @@ const people = [
   ]
   
   export default function ChatList() {
+
+    const [messages, setMessages] = useState([])
+
+    useEffect(() => {
+        fetchArticle()
+    }, [])
+
+    const fetchArticle = () => {
+        fetch('http://localhost:8090/api/v1/messages')
+            .then(row => row.json())
+            .then(row => setMessages(row.data.messages))
+    }
+
+
+
+
+
     return (
       <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">

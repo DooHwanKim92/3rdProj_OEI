@@ -31,6 +31,8 @@ public class ApiSecurityConfig {
                                 // .requestMatchers(HttpMethod.POST,"/api/*/members/login").permitAll()
                                 .requestMatchers("/api/*/members/**").permitAll()
                                 .requestMatchers("/api/*/reviews/**").permitAll()
+                                .requestMatchers("/api/*/messages").permitAll()
+                                .requestMatchers("/api/*/messages/**").permitAll()
                                 .requestMatchers("/api/*").permitAll()
                                 .anyRequest().authenticated()
                 )
