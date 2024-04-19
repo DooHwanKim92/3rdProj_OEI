@@ -51,26 +51,38 @@ const useGeolocation = () => {
 // 위,경도 위치 조회 끝
 
 
-
 // 게시글 등록
 export default function TypeArticeForm() {
-  const [categories, setCategory] = useState([]);
+
   const [article, setArticle] = useState({ category: "", title: "", content: "", img: null ,located:"",lat:"" ,lon:""});
   const router = useRouter();
   // 위치 조회 함수 호출
   const location = useGeolocation();
   const params = useParams();
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  let categories = [];
 
-  const fetchCategories = () => {
-    fetch("http://localhost:8090/api/v1/categories")
-      .then((response) => response.json())
-      .then((data) => setCategory(data.data.categories))
-      .catch((error) => console.error("카테고리 로드 에러:", error));
-  };
+  if(params.type === 'trade') {
+    categories = [
+      {id : 1,name : '판매',},{id : 2,name : '구매',},{id : 3,name : '대여',},{id : 4,name : '무료나눔',}
+    ]
+  } else if (params.type === 'club') {
+    categories = [
+      {id : 1,name : '홍보',},{id : 2,name : '활동',},{id : 3,name : '문의',}
+    ]
+  } else if (params.type === 'alba') {
+    categories = [
+      {id : 1,name : '구인',},{id : 2,name : '구직',},{id : 3,name : '대타',}
+    ]
+  } else if (params.type === 'freetalk') {
+    categories = [
+      {id : 1,name : '정보공유',},{id : 2,name : '찾습니다',},{id : 3,name : '수다',}
+    ]
+  } else if (params.type === 'property') {
+    categories = [
+      {id : 1,name : '월세',},{id : 2,name : '전세/반전세',},{id : 3,name : '매매',}
+    ]
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

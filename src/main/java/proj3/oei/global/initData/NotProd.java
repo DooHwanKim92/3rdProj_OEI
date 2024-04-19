@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import proj3.oei.domain.article.service.ArticleService;
-import proj3.oei.domain.category.service.CategoryService;
 import proj3.oei.domain.member.entity.Member;
 import proj3.oei.domain.member.service.MemberService;
 
@@ -17,14 +16,9 @@ import java.nio.file.*;
 @Profile({"dev", "test"})
 public class NotProd {
     @Bean
-    CommandLineRunner initData(ArticleService articleService, MemberService memberService, CategoryService categoryService, PasswordEncoder passwordEncoder) {
+    CommandLineRunner initData(ArticleService articleService, MemberService memberService, PasswordEncoder passwordEncoder) {
 
         return args -> {
-            // 한 번만 실행시켜
-            categoryService.create("판매");
-            categoryService.create("구매");
-            categoryService.create("대여");
-            categoryService.create("무료나눔");
 
 
             Path directoryArticle = Paths.get("C:\\oei\\file_upload\\article");

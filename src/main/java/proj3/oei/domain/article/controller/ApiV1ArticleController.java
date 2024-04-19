@@ -57,7 +57,7 @@ public class ApiV1ArticleController {
     }
 
     @GetMapping("/list/{type}")
-    // 중고거래 게시글 목록
+    // 게시글 목록
     public RsData<ArticlesResponse> getArticles(@PathVariable(value = "type") String type) {
         List<Article> articles = new ArrayList<>();
         if(type.equals("trade")) {

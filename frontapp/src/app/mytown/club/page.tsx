@@ -71,6 +71,8 @@ import {useEffect, useState} from "react"
                     <a href={`/article/${article.id}`}>
                       <span className="absolute inset-0" />
                       {article.title}
+                      <p className="text-blue-600">(댓글 : {article.reviews.length})</p>
+                      <h3 className="mt-4 text-sm text-gray-700">동네 : {article.location}</h3>
                       <img
                                 src={article.imgPath}
                                 alt={article.imgPath}
