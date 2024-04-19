@@ -80,7 +80,9 @@ useEffect(() => {
             <span className="sr-only">Your Company</span>
             <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
           </a>
+          OEI  
         </div>
+        
         <div className="flex lg:hidden">
           <button
             type="button"
@@ -254,6 +256,7 @@ useEffect(() => {
                 <button onClick={handleLogout} className="text-sm font-semibold leading-6 text-gray-900">
                   로그아웃 <span aria-hidden="true">&rarr;</span>
                 </button>
+                
               </div>
             </div>
           </div>

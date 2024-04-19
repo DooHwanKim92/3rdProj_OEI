@@ -56,15 +56,15 @@ export default function Home() {
 
   const [nowLocation, setNowLocation] = useState({lat:'', lon:""});
 
-  useEffect(() => {
-    // 위치 정보가 업데이트될 때마다 fetchLocation 함수를 호출
-    if (location.loaded) {
-      setNowLocation({...nowLocation, lat:location.coordinates.lat, lon:location.coordinates.lon})
-    }
-      fetch('http://localhost:8090/api/v1/', {
-                method: 'POST',
-            })
-  }, [location]);
+  // useEffect(() => {
+  //   // 위치 정보가 업데이트될 때마다 fetchLocation 함수를 호출
+  //   fetch('http://localhost:8090/api/v1/', {
+  //               method: 'POST',
+  //           });
+  //           if (location.loaded) {
+  //             setNowLocation({...nowLocation, lat:location.coordinates.lat, lon:location.coordinates.lon})
+  //           }
+  // }, [location]);
 
   const router = useRouter();
 

@@ -23,6 +23,7 @@ import proj3.oei.global.security.SecurityUser;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,10 +56,21 @@ public class ApiV1ArticleController {
         private final Article article;
     }
 
-    @GetMapping("")
+    @GetMapping("/list/{type}")
     // 중고거래 게시글 목록
-    public RsData<ArticlesResponse> getTradeArticles() {
-        List<Article> articles = this.articleService.getTradeArticles();
+    public RsData<ArticlesResponse> getArticles(@PathVariable(value = "type") String type) {
+        List<Article> articles = new ArrayList<>();
+        if(type.equals("trade")) {
+            articles = this.articleService.getTradeArticles();
+        } else if (type.equals("alba")) {
+            articles = this.articleService.getAlbaArticles();
+        } else if (type.equals("club")) {
+            articles = this.articleService.getClubArticles();
+        } else if (type.equals("freetalk")) {
+            articles = this.articleService.getFreeTalkArticles();
+        } else if (type.equals("property")) {
+            articles = this.articleService.getPropertyArticles();
+        }
         return RsData.of("S-1", "성공", new ArticlesResponse(articles));
     }
 
@@ -100,7 +112,7 @@ public class ApiV1ArticleController {
         private final Article article;
     }
 
-    @PostMapping("")
+    @PostMapping("/{type}")
     // RsData<CreateResponse>
     // @RequestBody CreateRequest createRequest
     public void createArticle(@Valid @NotBlank @RequestParam(value = "title") String title,
@@ -109,11 +121,12 @@ public class ApiV1ArticleController {
                                   @NotBlank @RequestParam(value = "located") String located,
                                   @NotBlank @RequestParam(value = "lat") String lat,
                                   @NotBlank @RequestParam(value = "lon") String lon,
+                                  @PathVariable(value = "type") String type,
                                   @RequestParam(value = "img") MultipartFile img) throws IOException {
 
         Member member = rq.getMember();
 
-        RsData<Article> createRs = this.articleService.createTradeArticle("trade",category, member,title, content, img, located, lat, lon);
+        RsData<Article> createRs = this.articleService.createTradeArticle(type,category, member,title, content, img, located, lat, lon);
 
 //        if (createRs.isFail()) return (RsData) createRs;
 //        // 왜 되는거지?? 왜 안됐던거여

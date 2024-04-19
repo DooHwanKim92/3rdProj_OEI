@@ -19,7 +19,7 @@ const posts = [
     // More posts...
   ]
   
-  export default function Club() {
+  export default function Freetalk() {
     return (
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -28,6 +28,10 @@ const posts = [
             <p className="mt-2 text-lg leading-8 text-gray-600">
               우리 동네 다양한 소식들
             </p>
+            <a
+          href={`/article/create/${'freetalk'}`}
+          className = "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"> 
+          게시글 작성하기 </a>
           </div>
           <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             {posts.map((post) => (

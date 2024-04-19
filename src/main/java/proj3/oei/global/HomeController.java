@@ -20,11 +20,11 @@ public class HomeController {
         private boolean trueOrFalse;
     }
 
+    // 메인페이지에서 현재 위치 조회
     @PostMapping("")
-    public NowLocationDto getNowLocation(@RequestParam(value = "lat") String lat,
-                                         @RequestParam(value = "lon") String lon) {
+    public NowLocationDto getNowLocation(@RequestBody NowLocationDto nowLocationDto) {
 
-        return new NowLocationDto(lat,lon);
+        return nowLocationDto;
 
     }
 

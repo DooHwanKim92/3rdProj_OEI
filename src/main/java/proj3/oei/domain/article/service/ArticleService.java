@@ -55,7 +55,6 @@ public class ArticleService {
             thumnailPath = "http://localhost:8090/file/" + thunmail;
         }   // 프론트(localhost:3000)랑 주소가 달라서 백엔드 주소를 경로에 함께 입력해줘야됨
 
-        if(type.equals("trade")) {
             Article article = Article.builder()
                     .category(category)
                     .author(member)
@@ -74,12 +73,7 @@ public class ArticleService {
             return RsData.of(
                     "S-3",
                     "게시글 등록 성공",
-                    article
-            );
-        } else return RsData.of(
-                "F-3",
-                "게시글 등록 실패"
-        );
+                    article);
     }
 
     @Transactional
@@ -119,5 +113,18 @@ public class ArticleService {
                 .build();
 
         this.articleRepository.save(addHit);
+    }
+
+    public List<Article> getAlbaArticles() {
+        return this.articleRepository.getAlbaArticles();
+    }
+    public List<Article> getClubArticles() {
+        return this.articleRepository.getClubArticles();
+    }
+    public List<Article> getFreeTalkArticles() {
+        return this.articleRepository.getFreeTalkArticles();
+    }
+    public List<Article> getPropertyArticles() {
+        return this.articleRepository.getPropertyArticles();
     }
 }

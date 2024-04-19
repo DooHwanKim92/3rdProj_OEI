@@ -12,5 +12,13 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     @Query("select a from Article a where a.type = 'trade' order by a.createDate desc")
     List<Article> getTradeArticles();
+    @Query("select a from Article a where a.type = 'club' order by a.createDate desc")
+    List<Article> getClubArticles();
+    @Query("select a from Article a where a.type = 'alba' order by a.createDate desc")
+    List<Article> getAlbaArticles();
+    @Query("select a from Article a where a.type = 'freetalk' order by a.createDate desc")
+    List<Article> getFreeTalkArticles();
+    @Query("select a from Article a where a.type = 'property' order by a.createDate desc")
+    List<Article> getPropertyArticles();
 }
 
