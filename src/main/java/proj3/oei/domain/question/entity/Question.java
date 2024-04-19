@@ -1,5 +1,6 @@
 package proj3.oei.domain.question.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,9 @@ import proj3.oei.global.jpa.BaseEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Question extends BaseEntity {
+
     @ManyToOne
+    @JsonIgnore
     private Member member;
 
     private String title;
