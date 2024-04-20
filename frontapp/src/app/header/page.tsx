@@ -156,7 +156,7 @@ useEffect(() => {
             문의하기
           </a>
           <a href="/chat" className="text-sm font-semibold leading-6 text-gray-900">
-            채팅
+            메세지
           </a>
           <a href="/profile" className="text-sm font-semibold leading-6 text-gray-900">
             나의정보

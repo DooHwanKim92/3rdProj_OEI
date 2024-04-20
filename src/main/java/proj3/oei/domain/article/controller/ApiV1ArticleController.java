@@ -152,7 +152,8 @@ public class ApiV1ArticleController {
     }
 
     @PatchMapping("/{id}")
-    public void modifyArticle(@PathVariable(value = "id") Long id, @Valid @NotBlank @RequestParam(value = "title") String title,
+    public void modifyArticle(@PathVariable(value = "id") Long id,
+                              @Valid @NotBlank @RequestParam(value = "title") String title,
                                   @NotBlank @RequestParam(value = "content") String content,
                                   @NotBlank @RequestParam(value = "category") String category,
                                   @NotBlank @RequestParam(value = "located") String located,

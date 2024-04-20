@@ -20,6 +20,7 @@ public class MessageService {
                 .title(title)
                 .content(content)
                 .member(member)
+                .other(other)
                 .build();
 
         // 받은 쪽지 상대 멤버에 저장
@@ -28,6 +29,7 @@ public class MessageService {
                 .title(title)
                 .content(content)
                 .member(other)
+                .other(member)
                 .build();
 
         this.messageRepository.save(sendMessage);

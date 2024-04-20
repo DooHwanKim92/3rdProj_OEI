@@ -1,5 +1,6 @@
 package proj3.oei.domain.message.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,12 @@ public class Message extends BaseEntity {
 
     // add two member at once
     // sender, receiver
+    @JsonIgnore
     @ManyToOne
     private Member member;
+
+    @JsonIgnore
+    @ManyToOne
+    private Member other;
+
 }

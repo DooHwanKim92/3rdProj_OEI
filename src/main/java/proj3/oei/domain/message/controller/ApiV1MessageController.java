@@ -10,11 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import proj3.oei.domain.member.entity.Member;
 import proj3.oei.domain.member.service.MemberService;
+import proj3.oei.domain.message.dto.MessageDto;
 import proj3.oei.domain.message.entity.Message;
 import proj3.oei.domain.message.service.MessageService;
 import proj3.oei.global.resultData.RsData;
 import proj3.oei.global.rq.Rq;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +34,7 @@ public class ApiV1MessageController {
     @Getter
     @AllArgsConstructor
     public static class MessagesResponse {
-        private final List<Message> messages;
+        private final List<MessageDto> messages;
     }
 
     @GetMapping("")
@@ -42,10 +44,17 @@ public class ApiV1MessageController {
 
         List<Message> messages = this.messageService.getMyMessages(member);
 
+        List<MessageDto> messageDtos = new ArrayList<>();
+
+        // DB에서 가져온 MesssageList를 DTO에 필요한 data만 담아서 가공
+        for(int i = 0; i < messages.size(); i ++) {
+            messageDtos.add(new MessageDto(messages.get(i)));
+        }
+
         return RsData.of(
                 "S-1",
                 "성공",
-                new MessagesResponse(messages)
+                new MessagesResponse(messageDtos)
         );
 
     }

@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    @Query("select m from Message m where m.member.id = :id")
+    @Query("select m from Message m where m.member.id = :id order by m.createDate desc")
     List<Message> getMyMessages(@Param("id") Long id);
 }
