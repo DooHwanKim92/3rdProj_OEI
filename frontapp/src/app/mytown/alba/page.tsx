@@ -25,6 +25,7 @@ const posts = [
   export default function Alba() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [kw, setKw] = useState({keyword:''});
 
     const params = 'alba';
 
@@ -56,6 +57,21 @@ const posts = [
             .then(row => setArticles(row.data.articles))
     }
 
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      const response = await fetch(`http://localhost:8090/api/v1/articles/search/${params}/${kw.keyword}`, {
+          method: 'GET',
+      })
+          .then(row => row.json())
+          .then(row => setArticles(row.data.articles))
+  }
+
+  const handleChange = (e) => {
+      const { name, value } = e.target;
+      setKw({ ...kw, [name]: value });
+  };
+
     return (
       <div className="bg-white py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -69,6 +85,35 @@ const posts = [
           className = "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"> 
           게시글 작성하기 </a>
           </div>
+          <form onSubmit={handleSubmit}>
+  <input
+    type="search"
+    className="relative m-0 block flex-auto rounded border border-solid border-neutral-200 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-surface outline-none transition duration-200 ease-in-out placeholder:text-neutral-500 focus:z-[3] focus:border-primary focus:shadow-inset focus:outline-none motion-reduce:transition-none dark:border-white/10 dark:text-white dark:placeholder:text-neutral-200 dark:autofill:shadow-autofill dark:focus:border-primary"
+    placeholder="게시글 검색"
+    aria-label="Search"
+    name="keyword"
+    id="exampleFormControlInput2"
+    aria-describedby="button-addon2" 
+    onChange={handleChange}
+    />
+    <button type="submit">
+    <span
+    className="flex items-center whitespace-nowrap px-3 py-[0.25rem] text-surface dark:border-neutral-400 dark:text-white [&>svg]:h-5 [&>svg]:w-5"
+    id="button-addon2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+    </svg>
+  </span>
+    </button>
+    </form>
           <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             {articles.map((article) => (
               <article key={article.id} className="flex max-w-xl flex-col items-start justify-between">

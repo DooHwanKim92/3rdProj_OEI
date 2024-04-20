@@ -74,6 +74,43 @@ public class ApiV1ArticleController {
         return RsData.of("S-1", "성공", new ArticlesResponse(articles));
     }
 
+    @Data
+    public static class SearchRequest {
+
+        private String kw;
+
+    }
+
+    @GetMapping("/search/{type}/{kw}")
+    // 검색한 게시글
+    public RsData<ArticlesResponse>getSearchArticles(@PathVariable(value = "type") String type,
+                                                     @PathVariable(value = "kw") String kw) {
+
+
+        List<Article> articles = this.articleService.findByKeyword(type,kw);
+
+        return RsData.of("S-2","성공",new ArticlesResponse(articles));
+
+    }
+
+    @GetMapping("/search/{type}/")
+    // 검색어 입력 안했을 때
+    public RsData<ArticlesResponse> getNoneSearchArticles(@PathVariable(value = "type") String type) {
+        List<Article> articles = new ArrayList<>();
+        if(type.equals("trade")) {
+            articles = this.articleService.getTradeArticles();
+        } else if (type.equals("alba")) {
+            articles = this.articleService.getAlbaArticles();
+        } else if (type.equals("club")) {
+            articles = this.articleService.getClubArticles();
+        } else if (type.equals("freetalk")) {
+            articles = this.articleService.getFreeTalkArticles();
+        } else if (type.equals("property")) {
+            articles = this.articleService.getPropertyArticles();
+        }
+        return RsData.of("S-1", "성공", new ArticlesResponse(articles));
+    }
+
     @GetMapping("/{id}")
     public RsData<ArticleResponse> getArticle(@PathVariable(value = "id") Long id) {
         Optional<Article> article = this.articleService.findById(id);
@@ -152,42 +189,55 @@ public class ApiV1ArticleController {
     }
 
     @PatchMapping("/{id}")
-    public void modifyArticle(@PathVariable(value = "id") Long id,
+    public RsData<Object> modifyArticle(@PathVariable(value = "id") Long id,
                               @Valid @NotBlank @RequestParam(value = "title") String title,
                                   @NotBlank @RequestParam(value = "content") String content,
-                                  @NotBlank @RequestParam(value = "category") String category,
                                   @NotBlank @RequestParam(value = "located") String located,
                                   @RequestParam(value = "img") MultipartFile img) throws IOException {
-
-        Member member = rq.getMember();
-
-        // 게시글 수정 권한 검증 로직 필요
-
-        Optional<Article> article = this.articleService.findById(id);
-
-        if (article.isEmpty()) {
-            article = null;
-        }
-
-        this.articleService.modify(article.get(), category, title, content, img, located);
-
-//        return RsData.of(
-//                "S-1",
-//                "%d 번 게시글 수정 성공".formatted(article.get().getId()),
-//                new ModifyResponse(article.get())
-//        );
-    }
-
-    @DeleteMapping("/{id}")
-    public RsData<Object> removeArticle(@PathVariable(value = "id") Long id) {
-
-        // 게시글 삭제 권한 검증 로직 필요
 
         Optional<Article> article = this.articleService.findById(id);
         if (article.isEmpty()) {
             return RsData.of(
                     "F-1",
                     "%d번 게시글은 존재하지 않습니다.".formatted(id)
+            );
+        }
+        Member member = rq.getMember();
+
+        // 게시글 수정 권한 검증 로직 필요
+        if(member != article.get().getAuthor()) {
+            return RsData.of(
+                    "F-5",
+                    "수정 권한이 없습니다."
+            );
+        }
+
+        this.articleService.modify(article.get(), title, content, img, located);
+
+        return RsData.of(
+                "S-1",
+                "%d 번 게시글 수정 성공".formatted(article.get().getId()),
+                new ModifyResponse(article.get())
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public RsData<Object> removeArticle(@PathVariable(value = "id") Long id) {
+
+        Optional<Article> article = this.articleService.findById(id);
+        if (article.isEmpty()) {
+            return RsData.of(
+                    "F-1",
+                    "%d번 게시글은 존재하지 않습니다.".formatted(id)
+            );
+        }
+        Member member = rq.getMember();
+
+        // 게시글 삭제 권한 검증 로직 필요
+        if(member != article.get().getAuthor()) {
+            return RsData.of(
+                    "F-5",
+                    "삭제 권한이 없습니다."
             );
         }
 

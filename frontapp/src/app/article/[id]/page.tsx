@@ -51,6 +51,7 @@ export default function ArticleDetail() {
 
         const response = await fetch(`http://localhost:8090/api/v1/articles/${params.id}`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             }

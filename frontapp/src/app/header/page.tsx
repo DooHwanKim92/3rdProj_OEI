@@ -13,7 +13,6 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
 import { useParams, useRouter } from "next/navigation";
-import Head from 'next/head'
 
 const products = [
   { name: '모임', description: '가까운 동네 이웃과 친해져보세요 😊', href: '/mytown/club', icon: ChartPieIcon },
@@ -64,20 +63,17 @@ useEffect(() => {
     })
 
     if (response.ok) {
-        alert("ok")
+        alert("로그아웃 성공")
         setIsLoggedIn(false);
         router.push("/")
     } else {
-        alert("fail")
+        alert("로그아웃 실패")
     }
   }
  
 
   return (
     <header className="bg-white">
-      <Head><script
-  type="text/javascript"
-  src="../node_modules/tw-elements/dist/js/tw-elements.umd.min.js"></script></Head>
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
           <a href="/" className="-m-1.5 p-1.5">
