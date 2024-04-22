@@ -44,6 +44,7 @@ export default function Article() {
     
         const response = await fetch(`http://localhost:8090/api/v1/articles/search/${params}/${kw.keyword}`, {
             method: 'GET',
+            credentials: 'include',
         })
             .then(row => row.json())
             .then(row => setArticles(row.data.articles))
