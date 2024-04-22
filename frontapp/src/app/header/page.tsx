@@ -63,11 +63,11 @@ useEffect(() => {
     })
 
     if (response.ok) {
-        alert("ok")
+        alert("로그아웃 성공")
         setIsLoggedIn(false);
         router.push("/")
     } else {
-        alert("fail")
+        alert("로그아웃 실패")
     }
   }
  
@@ -152,7 +152,7 @@ useEffect(() => {
             문의하기
           </a>
           <a href="/chat" className="text-sm font-semibold leading-6 text-gray-900">
-            채팅
+            메세지
           </a>
           <a href="/profile" className="text-sm font-semibold leading-6 text-gray-900">
             나의정보

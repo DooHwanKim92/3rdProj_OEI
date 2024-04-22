@@ -55,14 +55,12 @@ const useGeolocation = () => {
 // 게시글 등록
 export default function CreateArticleForm() {
   const params = useParams();
-  const [categories, setCategory] = useState([]);
-  const [article, setArticle] = useState({ category: "", title: "", content: "", img: null ,located:""});
+  const [article, setArticle] = useState({ title: "", content: "", img: null ,located:""});
   const router = useRouter();
   // 위치 조회 함수 호출
   const location = useGeolocation();
 
   useEffect(() => {
-    fetchCategories();
     fetchArticle()
   }, []);
 
@@ -74,20 +72,12 @@ export default function CreateArticleForm() {
                             })
     // 해당 URL로 응답받은 data를 json객체에 담는다. (백엔드 통신)
     // json객체에 담은 data를 다시 article에 set 한다.
-}
-
-  const fetchCategories = () => {
-    fetch("http://localhost:8090/api/v1/categories")
-      .then((response) => response.json())
-      .then((data) => setCategory(data.data.categories))
-      .catch((error) => console.error("카테고리 로드 에러:", error));
-  };
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("category", article.category);
     formData.append("title", article.title);
     formData.append("content", article.content);
     formData.append("img", article.img);
@@ -155,20 +145,6 @@ export default function CreateArticleForm() {
         </h2>
       </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        카테고리
-        <select
-          name="category"
-          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-          onChange={handleChange}
-        >
-          <option value="">카테고리 선택</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.name}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-        <br></br>
         제목
         <input
           type="text"

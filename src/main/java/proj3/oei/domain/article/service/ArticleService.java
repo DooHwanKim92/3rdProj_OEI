@@ -77,7 +77,7 @@ public class ArticleService {
     }
 
     @Transactional
-    public void modify(Article article, String category, String title, String content, MultipartFile img, String location) throws IOException {
+    public void modify(Article article, String title, String content, MultipartFile img, String location) throws IOException {
         String thumnailPath = "";
         String thunmail = "";
 
@@ -91,7 +91,6 @@ public class ArticleService {
         }   // 프론트(localhost:3000)랑 주소가 달라서 백엔드 주소를 경로에 함께 입력해줘야됨
 
         Article modifyArticle = article.toBuilder()
-                .category(category)
                 .title(title)
                 .content(content)
                 .imgPath(thumnailPath)
@@ -126,5 +125,9 @@ public class ArticleService {
     }
     public List<Article> getPropertyArticles() {
         return this.articleRepository.getPropertyArticles();
+    }
+
+    public List<Article> findByKeyword(String type, String kw) {
+        return this.articleRepository.findByKeyword(type,kw);
     }
 }
