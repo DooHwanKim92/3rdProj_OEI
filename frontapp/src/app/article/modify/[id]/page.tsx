@@ -55,7 +55,7 @@ const useGeolocation = () => {
 // 게시글 등록
 export default function CreateArticleForm() {
   const params = useParams();
-  const [article, setArticle] = useState({ title: "", content: "", img: null ,located:""});
+  const [article, setArticle] = useState({ title: "", content: ""});
   const router = useRouter();
   // 위치 조회 함수 호출
   const location = useGeolocation();

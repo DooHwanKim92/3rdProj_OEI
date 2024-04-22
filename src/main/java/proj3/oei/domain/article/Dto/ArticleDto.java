@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ArticleDto {
 
+    private Long id;
     private String category;
     private String title;
     private Long hit;
@@ -24,6 +25,7 @@ public class ArticleDto {
 
     public ArticleDto(Article article) {
 
+        this.id = article.getId();
         this.category = article.getCategory();
         this.title = article.getTitle();
         this.hit = article.getHit();

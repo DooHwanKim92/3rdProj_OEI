@@ -116,23 +116,41 @@ public class ApiV1ArticleController {
 
     }
 
-//    @GetMapping("/search/{type}/")
-//    // 검색어 입력 안했을 때
-//    public RsData<ArticlesResponse> getNoneSearchArticles(@PathVariable(value = "type") String type) {
-//        List<Article> articles = new ArrayList<>();
-//        if(type.equals("trade")) {
-//            articles = this.articleService.getTradeArticles();
-//        } else if (type.equals("alba")) {
-//            articles = this.articleService.getAlbaArticles();
-//        } else if (type.equals("club")) {
-//            articles = this.articleService.getClubArticles();
-//        } else if (type.equals("freetalk")) {
-//            articles = this.articleService.getFreeTalkArticles();
-//        } else if (type.equals("property")) {
-//            articles = this.articleService.getPropertyArticles();
-//        }
-//        return RsData.of("S-1", "성공", new ArticlesResponse(articles));
-//    }
+    @GetMapping("/search/{type}/")
+    // 검색어 입력 안했을 때
+    public RsData<ArticlesResponse> getNoneSearchArticles(@PathVariable(value = "type") String type) {
+
+        List<Article> articleList = new ArrayList<>();
+
+        Member member = rq.getMember();
+
+
+        if(type.equals("trade")) {
+            articleList = this.articleService.getTradeArticles();
+        } else if (type.equals("alba")) {
+            articleList = this.articleService.getAlbaArticles();
+        } else if (type.equals("club")) {
+            articleList = this.articleService.getClubArticles();
+        } else if (type.equals("freetalk")) {
+            articleList = this.articleService.getFreeTalkArticles();
+        } else if (type.equals("property")) {
+            articleList = this.articleService.getPropertyArticles();
+        }
+
+        List<ArticlesDto> articles = new ArrayList<>();
+
+        for(int i = 0; i < articleList.size(); i++) {
+            double distance = 0.0;
+
+            distance = distanceCalculator.calculateDistance(Double.parseDouble(member.getLastLocation().getLat()), Double.parseDouble(member.getLastLocation().getLon()), articleList.get(i).getLat(), articleList.get(i).getLon());
+
+            ArticlesDto articlesDto = new ArticlesDto(articleList.get(i),distance);
+
+            articles.add(articlesDto);
+        }
+
+        return RsData.of("S-1", "성공", new ArticlesResponse(articles));
+    }
 
     @Getter
     @AllArgsConstructor
