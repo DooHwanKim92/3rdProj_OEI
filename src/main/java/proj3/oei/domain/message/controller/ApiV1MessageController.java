@@ -89,4 +89,28 @@ public class ApiV1MessageController {
 
     }
 
+    @Data
+    public static class ReplyRequest {
+        @NotBlank
+        private String title;
+        @NotBlank
+        private String content;
+
+        private String senderName;
+    }
+
+    @PostMapping("/reply")
+    public void replyMessage(@Valid @RequestBody ReplyRequest replyRequest) {
+
+        Member member = rq.getMember();
+        Optional<Member> otherMember = this.memberService.findByNickname(replyRequest.getSenderName());
+        if (otherMember.isEmpty()) {
+            otherMember = null;
+        }
+
+        this.messageService.send(member, replyRequest.getTitle(), replyRequest.getContent(), otherMember.get());
+        // 보내는 사람, 제목, 내용, 받는 사람
+
+    }
+
 }
