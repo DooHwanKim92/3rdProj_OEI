@@ -32,7 +32,9 @@ export default function Article() {
     }, [])
 
     const fetchArticle = () => {
-        fetch(`http://localhost:8090/api/v1/articles/list/${params}`)
+        fetch(`http://localhost:8090/api/v1/articles/list/${params}`, {
+            credentials: 'include',
+        })
             .then(row => row.json())
             .then(row => setArticles(row.data.articles))
     }
@@ -128,9 +130,10 @@ export default function Article() {
                         </div>
                         <p className="mt-1 text-lg font-medium text-gray-900">[{article.category}] {article.title}</p>
                         조회수 : {article.hit}
-                        <p className="text-blue-600">(댓글 : {article.reviews.length})</p>
-                        <h3 className="mt-4 text-sm text-gray-700">작성자 : <a className="text-blue-600" href={`/profile/${article.author.id}`}>{article.author.nickname}</a></h3>
+                        <p className="text-blue-600">(댓글 : {article.reviewLength}개)</p>
+                        <h3 className="mt-4 text-sm text-gray-700">작성자 : <a className="text-blue-600" href={`/profile/${article.authorId}`}>{article.authorNickname}</a></h3>
                         <h3 className="mt-4 text-sm text-gray-700">동네 : {article.location}</h3>
+                        <h3 className="mt-4 text-sm text-gray-700">거리 : {article.distance}km</h3>
                         </div>
                 ))
             }

@@ -7,22 +7,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import proj3.oei.domain.article.Dto.ArticleDto;
+import proj3.oei.domain.article.Dto.ArticlesDto;
 import proj3.oei.domain.article.entity.Article;
 import proj3.oei.domain.article.service.ArticleService;
 import proj3.oei.domain.member.entity.Member;
 import proj3.oei.domain.member.service.MemberService;
+import proj3.oei.global.distanceCalculator.DistanceCalculator;
 import proj3.oei.global.resultData.RsData;
 import proj3.oei.global.rq.Rq;
-import proj3.oei.global.security.SecurityUser;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,33 +42,45 @@ public class ApiV1ArticleController {
 
     private final MemberService memberService;
 
+    private final DistanceCalculator distanceCalculator;
+
     @Getter
     @AllArgsConstructor
     public static class ArticlesResponse {
-        private final List<Article> articles;
+        private final List<ArticlesDto> articles;
     }
-
-    @Getter
-    @AllArgsConstructor
-    public static class ArticleResponse {
-        private final Article article;
-    }
-
     @GetMapping("/list/{type}")
     // 게시글 목록
     public RsData<ArticlesResponse> getArticles(@PathVariable(value = "type") String type) {
-        List<Article> articles = new ArrayList<>();
+
+        List<Article> articleList = new ArrayList<>();
+
+        Member member = rq.getMember();
+
         if(type.equals("trade")) {
-            articles = this.articleService.getTradeArticles();
+            articleList = this.articleService.getTradeArticles();
         } else if (type.equals("alba")) {
-            articles = this.articleService.getAlbaArticles();
+            articleList = this.articleService.getAlbaArticles();
         } else if (type.equals("club")) {
-            articles = this.articleService.getClubArticles();
+            articleList = this.articleService.getClubArticles();
         } else if (type.equals("freetalk")) {
-            articles = this.articleService.getFreeTalkArticles();
+            articleList = this.articleService.getFreeTalkArticles();
         } else if (type.equals("property")) {
-            articles = this.articleService.getPropertyArticles();
+            articleList = this.articleService.getPropertyArticles();
         }
+
+        List<ArticlesDto> articles = new ArrayList<>();
+
+        for(int i = 0; i < articleList.size(); i++) {
+            double distance = 0.0;
+
+            distance = distanceCalculator.calculateDistance(Double.parseDouble(member.getLastLocation().getLat()), Double.parseDouble(member.getLastLocation().getLon()), articleList.get(i).getLat(), articleList.get(i).getLon());
+
+            ArticlesDto articlesDto = new ArticlesDto(articleList.get(i),distance);
+
+            articles.add(articlesDto);
+        }
+
         return RsData.of("S-1", "성공", new ArticlesResponse(articles));
     }
 
@@ -86,30 +96,50 @@ public class ApiV1ArticleController {
     public RsData<ArticlesResponse>getSearchArticles(@PathVariable(value = "type") String type,
                                                      @PathVariable(value = "kw") String kw) {
 
+        Member member = rq.getMember();
 
-        List<Article> articles = this.articleService.findByKeyword(type,kw);
+        List<Article> articleList = this.articleService.findByKeyword(type,kw);
+
+        List<ArticlesDto> articles = new ArrayList<>();
+
+        for(int i = 0; i < articleList.size(); i++) {
+            double distance = 0.0;
+
+            distance = distanceCalculator.calculateDistance(Double.parseDouble(member.getLastLocation().getLat()), Double.parseDouble(member.getLastLocation().getLon()), articleList.get(i).getLat(), articleList.get(i).getLon());
+
+            ArticlesDto articlesDto = new ArticlesDto(articleList.get(i),distance);
+
+            articles.add(articlesDto);
+        }
 
         return RsData.of("S-2","성공",new ArticlesResponse(articles));
 
     }
 
-    @GetMapping("/search/{type}/")
-    // 검색어 입력 안했을 때
-    public RsData<ArticlesResponse> getNoneSearchArticles(@PathVariable(value = "type") String type) {
-        List<Article> articles = new ArrayList<>();
-        if(type.equals("trade")) {
-            articles = this.articleService.getTradeArticles();
-        } else if (type.equals("alba")) {
-            articles = this.articleService.getAlbaArticles();
-        } else if (type.equals("club")) {
-            articles = this.articleService.getClubArticles();
-        } else if (type.equals("freetalk")) {
-            articles = this.articleService.getFreeTalkArticles();
-        } else if (type.equals("property")) {
-            articles = this.articleService.getPropertyArticles();
-        }
-        return RsData.of("S-1", "성공", new ArticlesResponse(articles));
+//    @GetMapping("/search/{type}/")
+//    // 검색어 입력 안했을 때
+//    public RsData<ArticlesResponse> getNoneSearchArticles(@PathVariable(value = "type") String type) {
+//        List<Article> articles = new ArrayList<>();
+//        if(type.equals("trade")) {
+//            articles = this.articleService.getTradeArticles();
+//        } else if (type.equals("alba")) {
+//            articles = this.articleService.getAlbaArticles();
+//        } else if (type.equals("club")) {
+//            articles = this.articleService.getClubArticles();
+//        } else if (type.equals("freetalk")) {
+//            articles = this.articleService.getFreeTalkArticles();
+//        } else if (type.equals("property")) {
+//            articles = this.articleService.getPropertyArticles();
+//        }
+//        return RsData.of("S-1", "성공", new ArticlesResponse(articles));
+//    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ArticleResponse {
+        private final ArticleDto article;
     }
+
 
     @GetMapping("/{id}")
     public RsData<ArticleResponse> getArticle(@PathVariable(value = "id") Long id) {
@@ -124,7 +154,7 @@ public class ApiV1ArticleController {
         return  RsData.of(
                         "S-1",
                         "성공",
-                        new ArticleResponse(article.get())
+                        new ArticleResponse(new ArticleDto(article.get()))
                 );
     }
 

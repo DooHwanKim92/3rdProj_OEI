@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import proj3.oei.domain.lastlocation.entity.LastLocation;
+import proj3.oei.domain.lastlocation.service.LastLocationService;
 import proj3.oei.domain.member.dto.MemberDto;
 import proj3.oei.domain.member.entity.Member;
 import proj3.oei.domain.member.service.MemberService;
@@ -22,6 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ApiV1MemberController {
     private final MemberService memberService;
+    private final LastLocationService lastLocationService;
     private final Rq rq;
 
     @Getter
@@ -30,6 +33,10 @@ public class ApiV1MemberController {
         private String username;
         @NotBlank
         private String password;
+
+        private String lat;
+
+        private String lon;
     }
 
     @Getter
@@ -41,11 +48,27 @@ public class ApiV1MemberController {
     @PostMapping("/login")
     public RsData<LoginResponseBody> login (@Valid @RequestBody LoginRequestBody loginRequestBody) {
 
+        Optional<Member> member = this.memberService.findByUsername(loginRequestBody.getUsername());
+        if(member.isEmpty()) {
+            return RsData.of(
+                    "F-1",
+                    "존재하지 않는 유저입니다."
+            );
+        }
+
         RsData<MemberService.AuthAndMakeTokensResponseBody> authAndMakeTokensRs = memberService.authAndMakeTokens(loginRequestBody.getUsername(), loginRequestBody.getPassword());
 
         // 토큰 쿠키에 등록
         rq.setCrossDomainCookie("accessToken", authAndMakeTokensRs.getData().getAccessToken());
         rq.setCrossDomainCookie("refreshToken", authAndMakeTokensRs.getData().getRefreshToken());
+
+        LastLocation lastLocation = member.get().getLastLocation();
+
+        if(lastLocation == null) {
+            lastLocation = this.lastLocationService.createLastLocation(member.get(),loginRequestBody.getLat(), loginRequestBody.getLon());
+        }
+
+        this.memberService.saveLastLocation(member.get(),lastLocation);
 
         return RsData.of(
                 authAndMakeTokensRs.getResultCode(),

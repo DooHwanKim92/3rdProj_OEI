@@ -1,13 +1,73 @@
 'use client'
 
-import { useRouter } from "next/navigation";
-import { useState } from "react"
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+
+// 위,경도 위치 조회
+interface locationType {
+  loaded: boolean;
+  coordinates?: { lat: number; lon: number };
+  error?: { code: number; message: string };
+}
+
+const useGeolocation = () => {
+  const [location, setLocation] = useState<locationType>({
+    loaded: false,
+    coordinates: { lat: 0, lon: 0, }
+  })
+
+  // 성공에 대한 로직
+  const onSuccess = (location: { coords: { latitude: number; longitude: number; }; }) => {
+    setLocation({
+      loaded: true,
+      coordinates: {
+        lat: location.coords.latitude, // 위도
+        lon: location.coords.longitude, // 경도
+      }
+    })
+  }
+
+  // 에러에 대한 로직
+  const onError = (error: { code: number; message: string; }) => {
+    setLocation({
+      loaded: true,
+      error,
+    })
+  }
+
+  useEffect(() => {
+    // navigator 객체 안에 geolocation이 없다면
+    // 위치 정보가 없는 것.
+    if (!("geolocation" in navigator)) {
+      onError({
+        code: 0,
+        message: "Geolocation not supported",
+      })
+    }
+    navigator.geolocation.getCurrentPosition(onSuccess, onError);
+  }, [])
+
+  return location;
+}
+// 위,경도 위치 조회 끝
+
 
 export default function LogIn() {
 
-  const router = useRouter();
+  const [member, setMember] = useState({username: '', password: '', lat:'' ,lon:''})
 
-    const [member, setMember] = useState({username: '', password: ''})
+  const location = useGeolocation();
+
+  useEffect(() => {
+    // 위치 정보가 업데이트될 때마다 fetchLocation 함수를 호출
+    if (location.loaded) {
+        setMember({...member, lat:location.coordinates.lat, lon:location.coordinates.lon})
+    }
+  }, [location]);
+
+    const router = useRouter();
+
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();

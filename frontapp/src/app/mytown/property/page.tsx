@@ -31,7 +31,9 @@ import {useEffect, useState} from "react"
     }, [])
 
     const fetchArticle = () => {
-        fetch(`http://localhost:8090/api/v1/articles/list/${params}`)
+        fetch(`http://localhost:8090/api/v1/articles/list/${params}`,{
+          credentials: 'include',
+        })
             .then(row => row.json())
             .then(row => setArticles(row.data.articles))
     }
@@ -112,8 +114,9 @@ import {useEffect, useState} from "react"
                     <a href={`/article/${article.id}`}>
                       <span className="absolute inset-0" />
                       {article.title}
-                      <p className="text-blue-600">(댓글 : {article.reviews.length})</p>
+                      <p className="text-blue-600">(댓글 : {article.reviewLength}개)</p>
                       <h3 className="mt-4 text-sm text-gray-700">동네 : {article.location}</h3>
+                      <h3 className="mt-4 text-sm text-gray-700">거리 : {article.distance}km</h3>
                       <img
                                 src={article.imgPath}
                                 alt={article.imgPath}
@@ -123,15 +126,15 @@ import {useEffect, useState} from "react"
                   <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{article.content}</p>
                 </div>
                 <div className="relative mt-8 flex items-center gap-x-4">
-                  <img src={article.author.profileImg} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
+                  <img src={article.authorProfileImg} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
                   <div className="text-sm leading-6">
                     <p className="font-semibold text-gray-900">
-                      <a href={`/profile/${article.author.id}`}>
+                      <a href={`/profile/${article.authorId}`}>
                         <span className="absolute inset-0" />
-                        {article.author.nickname}
+                        {article.authorNickname}
                       </a>
                     </p>
-                    <p className="text-gray-600">{article.author.email}</p>
+                    <p className="text-gray-600">{article.authorEmail}</p>
                   </div>
                 </div>
               </article>
