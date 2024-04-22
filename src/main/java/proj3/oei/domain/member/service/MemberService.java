@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import proj3.oei.domain.lastlocation.entity.LastLocation;
 import proj3.oei.domain.member.entity.Member;
 import proj3.oei.domain.member.repository.MemberRepository;
 import proj3.oei.global.exception.GlobalException;
@@ -47,6 +48,7 @@ public class MemberService {
             thumnailPath = "http://localhost:8090/file/" + thunmail;
         }   // 프론트(localhost:3000)랑 주소가 달라서 백엔드 주소를 경로에 함께 입력해줘야됨
 
+
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
@@ -78,6 +80,14 @@ public class MemberService {
 
     public Optional<Member> findByNickname(String nickname) {
         return this.memberRepository.findByNickname(nickname);
+    }
+
+    public void saveLastLocation(Member member, LastLocation lastLocation) {
+        Member memberLocation = member.toBuilder()
+                .lastLocation(lastLocation)
+                .build();
+
+        this.memberRepository.save(memberLocation);
     }
 
     @AllArgsConstructor

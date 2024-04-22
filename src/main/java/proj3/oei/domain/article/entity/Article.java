@@ -1,5 +1,6 @@
 package proj3.oei.domain.article.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,6 +56,7 @@ public class Article extends BaseEntity {
     private Long hit;
 
     @OneToMany(mappedBy = "article",cascade = CascadeType.REMOVE)
+    @JsonIgnore
     private List<Review> reviews;
 
 }

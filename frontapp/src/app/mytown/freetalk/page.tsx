@@ -4,6 +4,7 @@ import {useEffect, useState} from "react"
   export default function FreeTalk() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [kw, setKw] = useState({keyword:''});
 
     const params = 'freetalk';
 
@@ -30,10 +31,27 @@ import {useEffect, useState} from "react"
     }, [])
 
     const fetchArticle = () => {
-        fetch(`http://localhost:8090/api/v1/articles/list/${params}`)
+        fetch(`http://localhost:8090/api/v1/articles/list/${params}`,{
+          credentials: 'include',
+        })
             .then(row => row.json())
             .then(row => setArticles(row.data.articles))
     }
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      const response = await fetch(`http://localhost:8090/api/v1/articles/search/${params}/${kw.keyword}`, {
+          method: 'GET',
+      })
+          .then(row => row.json())
+          .then(row => setArticles(row.data.articles))
+  }
+
+  const handleChange = (e) => {
+      const { name, value } = e.target;
+      setKw({ ...kw, [name]: value });
+  };
 
     return (
       <div className="bg-white py-24 sm:py-32">
@@ -48,6 +66,35 @@ import {useEffect, useState} from "react"
           className = "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"> 
           게시글 작성하기 </a>
           </div>
+          <form onSubmit={handleSubmit}>
+  <input
+    type="search"
+    className="relative m-0 block flex-auto rounded border border-solid border-neutral-200 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-surface outline-none transition duration-200 ease-in-out placeholder:text-neutral-500 focus:z-[3] focus:border-primary focus:shadow-inset focus:outline-none motion-reduce:transition-none dark:border-white/10 dark:text-white dark:placeholder:text-neutral-200 dark:autofill:shadow-autofill dark:focus:border-primary"
+    placeholder="게시글 검색"
+    aria-label="Search"
+    name="keyword"
+    id="exampleFormControlInput2"
+    aria-describedby="button-addon2" 
+    onChange={handleChange}
+    />
+    <button type="submit">
+    <span
+    className="flex items-center whitespace-nowrap px-3 py-[0.25rem] text-surface dark:border-neutral-400 dark:text-white [&>svg]:h-5 [&>svg]:w-5"
+    id="button-addon2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+    </svg>
+  </span>
+    </button>
+    </form>
           <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             {articles.map((article) => (
               <article key={article.id} className="flex max-w-xl flex-col items-start justify-between">
@@ -67,8 +114,9 @@ import {useEffect, useState} from "react"
                     <a href={`/article/${article.id}`}>
                       <span className="absolute inset-0" />
                       {article.title}
-                      <p className="text-blue-600">(댓글 : {article.reviews.length})</p>
+                      <p className="text-blue-600">(댓글 : {article.reviewLength}개)</p>
                       <h3 className="mt-4 text-sm text-gray-700">동네 : {article.location}</h3>
+                      <h3 className="mt-4 text-sm text-gray-700">거리 : {article.distance}km</h3>
                       <img
                                 src={article.imgPath}
                                 alt={article.imgPath}
@@ -78,15 +126,15 @@ import {useEffect, useState} from "react"
                   <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{article.content}</p>
                 </div>
                 <div className="relative mt-8 flex items-center gap-x-4">
-                  <img src={article.author.profileImg} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
+                  <img src={article.authorProfileImg} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
                   <div className="text-sm leading-6">
                     <p className="font-semibold text-gray-900">
-                      <a href={`/profile/${article.author.id}`}>
+                      <a href={`/profile/${article.authorId}`}>
                         <span className="absolute inset-0" />
-                        {article.author.nickname}
+                        {article.authorNickname}
                       </a>
                     </p>
-                    <p className="text-gray-600">{article.author.email}</p>
+                    <p className="text-gray-600">{article.authorEmail}</p>
                   </div>
                 </div>
               </article>
