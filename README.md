@@ -12,7 +12,7 @@
     - 새로운 API 활용 (ex.Geolocation, KAKAO Address)
 
 
-![기능정의서]([https://velog.io/@asdf4321/%EC%A4%91%EA%B0%84-2%EC%B0%A8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%9D%B4%EC%BB%A4%EB%A8%B8%EC%8A%A4%EC%87%BC%ED%95%91%EB%AA%B0-%EA%B8%B0%EB%8A%A5%EC%A0%95%EC%9D%98](https://velog.io/@asdf4321/%EC%A4%91%EA%B0%84-3%EC%B0%A8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%8C%80%EC%97%AC%EC%A4%91%EA%B0%9C-%EC%9B%B9-%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B8%B0%EB%8A%A5%EC%A0%95%EC%9D%98))]
+[기능정의서](https://velog.io/@asdf4321/%EC%A4%91%EA%B0%84-3%EC%B0%A8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EB%8C%80%EC%97%AC%EC%A4%91%EA%B0%9C-%EC%9B%B9-%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B8%B0%EB%8A%A5%EC%A0%95%EC%9D%98)
 
 ---
 
@@ -27,7 +27,7 @@
 
 ---
 
-## ☁️ ERD [링크]([https://dbdiagram.io/d/%EC%9D%B4%EC%BB%A4%EB%A8%B8%EC%8A%A4-DB-%EC%8A%A4%EC%BC%80%EC%B9%98-65cc60a5ac844320ae196fd9](https://dbdiagram.io/d/3rdProj_OEI-6610ad2203593b6b61520ec2))
+## ☁️ ERD [링크](https://dbdiagram.io/d/3rdProj_OEI-6610ad2203593b6b61520ec2)
 
 ![image](https://github.com/DooHwanKim92/3rdProj_OEI/assets/144447216/5949d05d-bfea-4113-80f8-846bd2115a4c)
 
@@ -37,6 +37,8 @@
 ## 👀 시연영상
 
 ![Video Label](https://youtu.be/Qow8tkjBIzc?si=bQgw3TtCKC7Dvp8O)
+
+[![Video Label](http://img.youtube.com/vi/Qow8tkjBIzc/0.jpg)(https://www.youtube.com/watch?v=Qow8tkjBIzc)
 
 ---
 
