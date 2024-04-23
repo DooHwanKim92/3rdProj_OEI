@@ -36,9 +36,7 @@
 
 ## 👀 시연영상
 
-[Video Label](https://youtu.be/Qow8tkjBIzc?si=bQgw3TtCKC7Dvp8O)
-
-제작 후 업로드 예정
+![Video Label](https://youtu.be/Qow8tkjBIzc?si=bQgw3TtCKC7Dvp8O)
 
 ---
 
@@ -76,19 +74,20 @@ DTO를 만들어 프론트에서 필요한 Data만 담아서 전달해준다
 
 #### 🚥 [해결]
 
-1. `Geolocation API` 로 현재 로그인한 유저의 디바이스 장치 기능(GPS, WIFI, IP주소)을 통해 현재 위도와 경도를 조회한다
+1. `Geolocation API` 로 현재 로그인한 유저의 디바이스 기능(GPS, WIFI, IP주소)을 통해
+   현재 위도와 경도를 조회한다
 ![image](https://github.com/DooHwanKim92/3rdProj_OEI/assets/144447216/2df629ef-2de1-4b8c-b54a-b55864d18234)
 
-2. 조회한 위도와 경도를 `KAKAO API`로 도로명 주소 등을 얻어 필요한 Data를 게시글에 저장한다
+3. 조회한 위도와 경도를 `KAKAO API`로 도로명 주소 등을 얻어 필요한 Data를 게시글에 저장한다
 ![image](https://github.com/DooHwanKim92/3rdProj_OEI/assets/144447216/a521f298-094c-4359-a955-56a8dc3fa074)
 ![image](https://github.com/DooHwanKim92/3rdProj_OEI/assets/144447216/12abd152-4e00-4fec-81bd-5e98ad6a9f75)
 
-3. 사용자가 로그인 했을 때, 현재 위치 정보를 저장한다
+4. 사용자가 로그인 했을 때, 현재 위치 정보를 저장한다
 ![image](https://github.com/DooHwanKim92/3rdProj_OEI/assets/144447216/d4a27e44-af00-4e2e-a9c2-d55f84bb6164)
 
-4. 백엔드에서 현재 로그인한 유저의 위치와 게시글의 위치 거리를 계산하는 로직을 만든다
+5. 백엔드에서 현재 로그인한 유저의 위치와 게시글의 위치 거리를 계산하는 로직을 만든다
   
-5. 게시글 목록을 나타낼 때, DTO에 `Distance`를 추가해서 프론트에 전달한다
+6. 게시글 목록을 나타낼 때, DTO에 `Distance`를 추가해서 프론트에 전달한다
 
 결과
 ![image](https://github.com/DooHwanKim92/3rdProj_OEI/assets/144447216/db8bf3a0-1598-4c5a-88b6-3639ee4cf160)
