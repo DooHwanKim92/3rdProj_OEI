@@ -36,9 +36,7 @@
 
 ## 👀 시연영상
 
-![Video Label](https://youtu.be/Qow8tkjBIzc?si=bQgw3TtCKC7Dvp8O)
-
-[![Video Label](http://img.youtube.com/vi/Qow8tkjBIzc/0.jpg)(https://www.youtube.com/watch?v=Qow8tkjBIzc)
+[![Video Label](http://img.youtube.com/vi/Qow8tkjBIzc/0.jpg)(https://www.youtube.com/watch?v=Qow8tkjBIzc)]
 
 ---
 
