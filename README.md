@@ -57,8 +57,7 @@
 
 #### 🚥 [해결]
 
-![image](![image](https://github.com/DooHwanKim92/3rdProj_OEI/assets/144447216/116bc038-ce72-4adf-9c5a-803ac93cb7df)
-)
+![image](https://github.com/DooHwanKim92/3rdProj_OEI/assets/144447216/116bc038-ce72-4adf-9c5a-803ac93cb7df)
 
 DTO를 만들어 프론트에서 필요한 Data만 담아서 전달해준다
 
